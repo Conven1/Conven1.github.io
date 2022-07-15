@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+  
+    
+    <entry>
+      <title>Hello World</title>
+      <link href="/2022/07/16/hello-world/"/>
+      <url>/2022/07/16/hello-world/</url>
+      
+        <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>redis的持久化机制——RDB和AOF</title>
+      <link href="/2022/07/15/redis/%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6/"/>
+      <url>/2022/07/15/redis/%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6/</url>
+      
+        <content type="html"><![CDATA[<h2 id="RDB"><a href="#RDB" class="headerlink" title="RDB"></a>RDB</h2><p>RDB持久化就是把在指定的时间间隔内生成数据集以快照的形式保存到磁盘上。  </p><blockquote><p>什么是快照?可以这样理解，给当前时刻的数据，拍一张照片，然后保存下来。</p></blockquote><h3 id="触发机制"><a href="#触发机制" class="headerlink" title="触发机制"></a>触发机制</h3><p>RDB持久化会在指定目录下会生成一个dump.rdb文件，Redis 重启的时候，通过加载dump.rdb文件来恢复数据。RDB触发机制主要有以下几种：<br><img src="https://img-blog.csdnimg.cn/img_convert/16cfb5bbc2bae57553d4dbb0c7730398.png"></p><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul><li>RDB 是一个非常紧凑（compact）的文件，它保存了 Redis 在某个时间点上的数据集，这种文件非常适合用于进行备份。</li><li>RDB 非常适用于灾难恢复（disaster recovery）：它只有一个文件，并且内容都非常紧凑。</li><li>RDB 可以最大化 Redis 的性能：父进程在保存 RDB 文件时唯一要做的就是 fork 出一个子进程，然后这个子进程就会处理接下来的所有保存工作，父进程无须执行任何磁盘 I&#x2F;O 操作。</li><li>RDB 在恢复大数据集时的速度比 AOF 的恢复速度要快。</li></ul><h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul><li>周期性的去备份数据，一旦发生故障停机，就会丢失几分钟的数据。</li><li>每次保存 RDB 的时候，Redis 都要 fork() 出一个子进程，并由子进程来进行实际的持久化工作。 在数据集比较庞大时， fork() 可能会非常耗时，造成服务器在某某毫秒内停止处理客户端。</li></ul><h2 id="AOF"><a href="#AOF" class="headerlink" title="AOF"></a>AOF</h2><p>AOF 持久化记录服务器执行的所有写操作命令，并在服务器启动时，通过重新执行这些命令来还原数据集。</p><h3 id="AOF的工作流程"><a href="#AOF的工作流程" class="headerlink" title="AOF的工作流程"></a>AOF的工作流程</h3><blockquote><p>AOF 文件中的命令全部以 Redis 协议的格式来保存，新命令会被追加到文件的末尾。 Redis 还可以在后台对 AOF 文件进行重写（rewrite），使得 AOF 文件的体积不会超出保存数据集状态所需的实际大小。Redis 还可以同时使用 AOF 持久化和 RDB 持久化。 在这种情况下， 当 Redis 重启时， 它会优先使用 AOF 文件来还原数据集， 因为 AOF 文件保存的数据集通常比 RDB 文件所保存的数据集更完整。你甚至可以关闭持久化功能，让数据只在服务器运行时存在。<br><img src="https://img-blog.csdnimg.cn/img_convert/bc40260fe304a5155174e6e029ab6d11.png"></p></blockquote><h3 id="优点-1"><a href="#优点-1" class="headerlink" title="优点"></a>优点</h3><ul><li>使用 AOF 持久化会让 Redis 变得非常耐久（much more durable）：你可以设置不同的 fsync 策略，比如无 fsync ，每秒钟一次 fsync ，或者每次执行写入命令时 fsync。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">appendfsync参数，三个取值：</span><br><span class="line"></span><br><span class="line">always: 每个事件周期都同步刷新一次</span><br><span class="line">everysec: 每一秒都同步刷新一次(默认推荐)</span><br><span class="line">no: 操作系统自己决定什么时候真正写入</span><br></pre></td></tr></table></figure></li><li>AOF 的默认策略为每秒钟 fsync 一次，在这种配置下，Redis 仍然可以保持良好的性能，并且就算发生故障停机，也最多只会丢失一秒钟的数据（ fsync 会在后台线程执行，所以主线程可以继续努力地处理命令请求）。</li><li>AOF 文件是一个只进行追加操作的日志文件（append only log）， 因此对 AOF 文件的写入不需要进行 seek ， 即使日志因为某些原因而包含了未写入完整的命令（比如写入时磁盘已满，写入中途停机，等等）， redis-check-aof 工具也可以轻易地修复这种问题。<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">redis-check-aof --fix</span></span><br></pre></td></tr></table></figure></li><li>Redis 可以在 AOF 文件体积变得过大时，自动地在后台对 AOF 进行重写： 重写后的新 AOF 文件包含了恢复当前数据集所需的最小命令集合。 整个重写操作是绝对安全的，因为 Redis 在创建新 AOF 文件的过程中，会继续将命令追加到现有的 AOF 文件里面，即使重写过程中发生停机，现有的 AOF 文件也不会丢失。 而一旦新 AOF 文件创建完毕，Redis 就会从旧 AOF 文件切换到新 AOF 文件，并开始对新 AOF 文件进行追加操作。<br><img src="https://img-blog.csdnimg.cn/20201022095627680.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xsNTk0MzE3NTY2,size_16,color_FFFFFF,t_70#pic_center"></li><li>AOF 文件有序地保存了对数据库执行的所有写入操作， 这些写入操作以 Redis 协议的格式保存， 因此 AOF 文件的内容非常容易被人读懂， 对文件进行分析（parse）也很轻松。 导出（export） AOF 文件也非常简单。</li></ul><h3 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h3><ul><li>对于相同的数据集来说，AOF 文件的体积通常要大于 RDB 文件的体积。根据所使用的 fsync 策略，AOF 的速度可能会慢于 RDB 。</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> redis </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> redis </tag>
+            
+            <tag> 面试 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>如何实现redis的高可用</title>
+      <link href="/2022/07/15/redis/%E9%AB%98%E5%8F%AF%E7%94%A8/"/>
+      <url>/2022/07/15/redis/%E9%AB%98%E5%8F%AF%E7%94%A8/</url>
+      
+        <content type="html"><![CDATA[<h2 id="哨兵模式"><a href="#哨兵模式" class="headerlink" title="哨兵模式"></a>哨兵模式</h2><h3 id="哨兵功能描述"><a href="#哨兵功能描述" class="headerlink" title="哨兵功能描述"></a>哨兵功能描述</h3><p>哨兵的核心功能就是主节点的故障转移<br>Redis官方对哨兵的功能描述:</p><blockquote><p>监控（Monitoring）：哨兵会不断地检查主节点和从节点是否运作正常。<br>自动故障转移（Automatic failover）：当主节点不能正常工作时，哨兵会开始自动故障转移操作，它会将失效主节点的其中一个从节点升级为新的主节点，并让其他从节点改为复制新的主节点。<br>配置提供者（Configuration provider）：客户端在初始化时，通过连接哨兵来获得当前Redis服务的主节点地址。<br>通知（Notification）：哨兵可以将故障转移的结果发送给客户端。  </p></blockquote><p>其中，监控和自动故障转移功能，使得哨兵可以及时发现主节点故障并完成转移；而配置提供者和通知功能，则需要在与客户端的交互中才能体现；哨兵之间也会进行相互监控，多个哨兵不仅监控各个 Redis 服务器，而且哨兵之间互相监控，看看哨兵们是否还“活”着。</p><h3 id="哨兵模式架构"><a href="#哨兵模式架构" class="headerlink" title="哨兵模式架构"></a>哨兵模式架构</h3><p>下图是一个典型的哨兵模式架构:<br><img src="https://pics2.baidu.com/feed/3b87e950352ac65ca374158893ec4d1992138afb.jpeg?token=6c2aa7026afb44e451785e83959a8bf5" alt="典型的哨兵模式架构"><br>它由两部分组成，哨兵节点和数据节点:<br>哨兵节点：哨兵系统由一个或多个哨兵节点组成，哨兵节点是特殊的redis节点，不存储数据。<br>数据节点：主节点和从节点都是数据节点。</p><h3 id="部署哨兵模式"><a href="#部署哨兵模式" class="headerlink" title="部署哨兵模式"></a>部署哨兵模式</h3><p>下面部署一个简单的哨兵模式,包含一个主节点,两个从节点和三个哨兵节点,这些节点都部署到一台机器上,使用端口号进行区分</p><ul><li>部署主节点<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">redis-6379.conf</span></span><br><span class="line">port 6379</span><br><span class="line">logfile &quot;6379.log&quot;</span><br><span class="line">dbfilename &quot;dump-6379.rdb&quot;</span><br></pre></td></tr></table></figure></li><li>部署从节点<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">redis-6380.conf</span></span><br><span class="line">port 6380</span><br><span class="line">logfile &quot;6380.log&quot;</span><br><span class="line">dbfilename &quot;dump-6380.rdb&quot;</span><br><span class="line">slaveof 127.0.0.1 6379</span><br></pre></td></tr></table></figure><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">redis-6380.conf</span></span><br><span class="line">port 6381</span><br><span class="line">logfile &quot;6381.log&quot;</span><br><span class="line">dbfilename &quot;dump-6381.rdb&quot;</span><br><span class="line">slaveof 127.0.0.1 6379</span><br></pre></td></tr></table></figure></li><li>依次启动主节点和从节点<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">redis-server redis-6379.conf</span><br><span class="line">redis-server redis-6380.conf</span><br><span class="line">redis-server redis-6381.conf</span><br></pre></td></tr></table></figure><img src="/"><br>在redis-cli中使用命令<code>info Replication</code>查看主从结构是否部署成功，使用set命令向主服务器存入一个key,查看从服务器中是否成功复制。<br><img src="/"></li><li>部署哨兵节点<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">sentinel-26379.conf</span></span><br><span class="line">port 26379</span><br><span class="line">logfile &quot;26379.log&quot;</span><br><span class="line">sentinel monitor mymaster 127.0.0.1 6379 2</span><br></pre></td></tr></table></figure>（26379、26382、26381的部署同上只需改变端口号即可）<br>意思是监控127.0.0.1 6379这个主节点，2代表的意思是至少需要两个以上的哨兵同意才能判定为主节点故障并进行故障转移。注意：要保证所有哨兵实例的配置是一致的，否则导致哨兵集群一直没有对有故障的主节点形成共识，也就没有及时切换主节点，最终的结果就是集群服务不稳定。</li><li>启动哨兵节点<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">redis-server sentinel-26379.conf --sentinel</span><br><span class="line">redis-server sentinel-26380.conf --sentinel</span><br><span class="line">redis-server sentinel-26381.conf --sentinel</span><br></pre></td></tr></table></figure>使用命令<code>redis-cli.exe -p 26379 -h 127.0.0.1</code>启动哨兵的cli执行命令<code>info Sentinel</code>查看哨兵节点是否部署成功。<br><img src="/"><br>如图所示：可以看出26379哨兵节点已经在监控主节点(即127.0.0.1:6379)，并发现了其2个从节点和另外2个哨兵节点。</li></ul><h3 id="演示故障转移"><a href="#演示故障转移" class="headerlink" title="演示故障转移"></a>演示故障转移</h3><ul><li>关闭主节点6379的服务模拟服务宕机，此时立刻去26379的cli下使用<code>info Sentinel</code>查看发现此时主节点仍然还是6379，这是因为服务故障转移需要一定时间，一段时间后再次使用命令查看，就会发现主节点变换成了6380或6381其中一个原从节点。<br><img src="/"></li><li>从查看结果中我们可以发现，主节点6381下依然是两个从节点，这是因为将6381切换为主节点的同时将6379切换成了从节点，6379即使已经挂了，但是哨兵只是认为是主观下线，不会进行客观下线，因此认为该节点会一直存在。<blockquote><p>假设主节点宕机，哨兵1先检测到这个结果，系统并不会马上进行故障转移(failover) 过程，仅仅是哨兵1主观的认为主服务器不可用，这个现象成为<code>主观下线</code>。<br>当后面的哨兵也检测到主服务器不可用，并且数量达到一定值时，那么哨兵之间就会进行一次投票，投票的结果由一个哨兵发起，进行 failover 操作。切换成功后，就会通过发布订阅模式，让各个哨兵把自己监控的从服务器实现切换主机，这个过程称为<code>客观下线</code>。这样对于客户端而言，一切都是透明的。</p></blockquote></li><li>重启6379服务，就可以看到6379成为了6381的从节点并且执行了复制。<br><img src="/"></li><li>在故障转移阶段，哨兵和主从节点的配置文件都会被改写。 对于主从节点，主要是slaveof配置的变化：新的主节点没有了slaveof配置，其从节点则slaveof新的主节点。</li></ul><h3 id="哨兵leader的选举流程"><a href="#哨兵leader的选举流程" class="headerlink" title="哨兵leader的选举流程"></a>哨兵leader的选举流程</h3><ol><li>判断客观下线</li></ol><ul><li>任何一个哨兵实例只要判断主节点主观下线，就会给其他哨兵实例发送<code>is-master-down-by-addr</code>命令  。</li><li>收到 is-master-down-by-addr 命令的实例会根据自己和主节点的连接情况，做出 Y 或 N 的响应（Y 赞成，N 反对）。</li><li>哨兵获得了仲裁所需的赞成票数后，就可以标记主节点为客观下线，这个所需赞成票通过 quorum 配置项决定,如 quorum 配置为 3，则该哨兵判断主库客观下线需要 3 票赞成（包括了自己的1票。</li></ul><ol start="2"><li>leader选举</li></ol><ul><li>哨兵拿到赞成主节点下线的票数大于等于 quorum，就确定了主节点客观下线。</li><li>哨兵就可以再给其他哨兵发送命令，表明希望由自己担任执行主从切换的 Leader。</li><li>在投票过程中，任何一个想成为 Leader 的哨兵，要满足两个条件：拿到半数以上的赞成票和拿到的票数同时还需要大于等于哨兵配置文件中的 quorum值。</li></ul><ol start="3"><li>选举实例<br>现有三个哨兵ABC,quorum值为2。</li></ol><ul><li>哨兵A判断主节点为客观下线，他认为自己有功劳，就和哨兵B、哨兵C说他想当leader，并为自己投了一票。</li><li>哨兵C也判断主节点为客观下线，他也认为自己有功劳，就和哨兵A、哨兵B说他想当leader，并为自己投了一票。</li><li>哨兵A收到了C的请求，但是他已经给自己投了，所以他投了N表示不同意，同一时间哨兵B也受到了哨兵C的请求，可能因为网络阻塞，这是他收到的的第一份请求所以他同意了哨兵C的请求。</li><li>哨兵B收到了哨兵A的请求，但是已经投了给哨兵C了，所以就只能回了N给哨兵A。</li><li>至此哨兵A得了1票，哨兵C得了2票，也达到预设的 quorum 值，哨兵C成为了哨兵的leader,接着，哨兵C会开始执行选主节点的操作，而且在选定新主节点后，会给其他从节点和客户端通知新节点的信息。</li></ul><h3 id="哨兵工作模式"><a href="#哨兵工作模式" class="headerlink" title="哨兵工作模式"></a>哨兵工作模式</h3><ul><li>每个哨兵以每秒钟一次的频率向它所知的主节点，从节点以及其他哨兵实例发送一个 PING命令。</li><li>如果一个实例（instance）距离最后一次有效回复 PING 命令的时间超过 down-after-milliseconds（默认是180000ms,即3分钟）选项所指定的值， 则这个实例会被哨兵标记为主观下线。</li><li>如果一个主节点被标记为主观下线，则正在监视这个主节点的所有哨兵要以每秒一次的频率确认主节点的确进入了主观下线状态。</li><li>当有足够数量的哨兵（大于等于配置文件指定的值）在指定的时间范围内确认主节点确实进入了主观下线状态， 则主节点会被标记为客观下线。</li><li>在一般情况下， 每个哨兵会以每10秒一次的频率向它已知的所有主节点，从节点发送 INFO 命令。</li><li>当主节点被哨兵标记为客观下线时，哨兵向下线的主节点的所有从节点发送 INFO 命令的频率会从 10 秒一次改为每秒一次。</li><li>若没有足够数量的哨兵同意主节点已经下线，主节点的客观下线状态就会被移除；若主节点重新向哨兵的 PING 命令返回有效回复，主节点的主观下线状态就会被移除。</li></ul><h3 id="哨兵节点支持的命令"><a href="#哨兵节点支持的命令" class="headerlink" title="哨兵节点支持的命令"></a>哨兵节点支持的命令</h3><ol><li>基础查询：通过这些命令，可以查询哨兵系统的拓扑结构、节点信息、配置信息等<blockquote><p>info sentinel：获取监控的所有主节点的基本信息<br>sentinel masters：获取监控的所有主节点的详细信息<br>sentinel master mymaster：获取监控的主节点mymaster的详细信息<br>sentinel slaves mymaster：获取监控的主节点mymaster的从节点的详细信息<br>sentinel sentinels mymaster：获取监控的主节点mymaster的哨兵节点的详细信息<br>sentinel get-master-addr-by-name mymaster：获取监控的主节点mymaster的地址信息，前文已有介绍<br>sentinel is-master-down-by-addr：哨兵节点之间可以通过该命令询问主节点是否下线，从而对是否客观下线做出判断</p></blockquote></li><li>增加&#x2F;移除对主节点的监控<blockquote><p>sentinel monitor mymaster 127.0.0.1 26379 2：与部署哨兵节点时配置文件中的sentinel monitor功能完全一样，不再详述<br>sentinel remove mymaster：取消当前哨兵节点对主节点mymaster的监控</p></blockquote></li><li>强制故障转移<blockquote><p>sentinel failover mymaster：该命令可以强制对mymaster执行故障转移，即便当前的主节点运行完好</p></blockquote></li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> redis </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> redis </tag>
+            
+            <tag> 面试 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>redis基本数据结构类型</title>
+      <link href="/2022/07/13/redis/%E5%9F%BA%E6%9C%AC%E6%A6%82%E8%BF%B0/"/>
+      <url>/2022/07/13/redis/%E5%9F%BA%E6%9C%AC%E6%A6%82%E8%BF%B0/</url>
+      
+        <content type="html"><![CDATA[<h3 id="redis概念"><a href="#redis概念" class="headerlink" title="redis概念"></a>redis概念</h3><blockquote><p>Redis，英文全称是Remote Dictionary Server（远程字典服务），是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。</p></blockquote><h3 id="五种基本数据类型"><a href="#五种基本数据类型" class="headerlink" title="五种基本数据类型"></a>五种基本数据类型</h3><blockquote><ul><li>String是Redis最基础的数据结构类型，它是二进制安全的，可以存储图片或者序列化的对象，值最大存储为512M。</li><li>在Redis中，哈希类型是指v（值）本身又是一个键值对（k-v）结构。</li><li>列表（list）类型是用来存储多个有序的字符串，一个列表最多可以存储2^32-1个元素。</li><li>集合（set）类型也是用来保存多个的字符串元素，但是不允许重复元素。</li><li>zset,已排序的字符串集合，同时元素不能重复</li></ul></blockquote><h3 id="三种特殊数据类型"><a href="#三种特殊数据类型" class="headerlink" title="三种特殊数据类型"></a>三种特殊数据类型</h3><blockquote><ul><li>Geo：Redis3.2推出的，地理位置定位，用于存储地理位置信息，并对存储的信息进行操作。</li><li>HyperLogLog：用来做基数统计算法的数据结构，如统计网站的UV。</li><li>Bitmaps ：用一个比特位来映射某个元素的状态，在Redis中，它的底层是基于字符串类型实现的，可以把bitmaps成作一个以比特位为单位的数组。</li></ul></blockquote>]]></content>
+      
+      
+      <categories>
+          
+          <category> redis </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> redis </tag>
+            
+            <tag> 数据结构 </tag>
+            
+            <tag> 面试 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>如何控制el-select下拉框显隐</title>
+      <link href="/2022/07/11/Element/%E4%B8%8B%E6%8B%89%E6%A1%86%E6%98%BE%E9%9A%90/"/>
+      <url>/2022/07/11/Element/%E4%B8%8B%E6%8B%89%E6%A1%86%E6%98%BE%E9%9A%90/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p>在使用ElementUI的<a href="https://element.eleme.cn/#/zh-CN/component/select">el-select</a>下拉框时，默认的：下拉框获得焦点就展开下拉框，失去焦点或选择事件发生后收起下拉框，但是有些场景需要我们人为的去控制下拉框。</p></blockquote><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">ref</span>.<span class="property">visible</span> = <span class="title function_">boolean</span>(<span class="literal">true</span>为显示、<span class="literal">false</span>为隐藏)</span><br></pre></td></tr></table></figure><blockquote><p>展开下拉框</p></blockquote><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">ref</span>.<span class="title function_">toggleMenu</span>()</span><br></pre></td></tr></table></figure><blockquote><p>触发选择器的失去焦点事件收起下拉框</p></blockquote><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">ref</span>.<span class="title function_">blur</span>() </span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> Element </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Element </tag>
+            
+            <tag> 下拉框 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>el-dialog的弹出框阴影遮盖问题</title>
+      <link href="/2022/07/11/Element/%E5%BC%B9%E5%87%BA%E6%A1%86%E9%98%B4%E5%BD%B1/"/>
+      <url>/2022/07/11/Element/%E5%BC%B9%E5%87%BA%E6%A1%86%E9%98%B4%E5%BD%B1/</url>
+      
+        <content type="html"><![CDATA[<p>在使用ElementUI的<a href="https://element.eleme.cn/#/zh-CN/component/dialog">el-dialog</a>弹出框时，有可能会有阴影遮盖导致弹出框中的表单无法输入的问题。</p><h3 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h3><blockquote><p>这种问题常常出现在弹出框层级嵌套上，上层的阴影图层在下层弹出框上导致的覆盖问题。</p></blockquote><h3 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">modal-append-to-body = <span class="string">&quot;false&quot;</span></span><br><span class="line">或</span><br><span class="line">append-to-body = “<span class="literal">true</span><span class="string">&quot;</span></span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> Element </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Element </tag>
+            
+            <tag> 弹出框 </tag>
+            
+            <tag> 踩坑 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>el-autocomplete输入建议远程获取列表下拉框的使用</title>
+      <link href="/2022/07/11/Element/%E8%BF%9C%E7%A8%8B%E6%90%9C%E7%B4%A2%E5%BB%BA%E8%AE%AE/"/>
+      <url>/2022/07/11/Element/%E8%BF%9C%E7%A8%8B%E6%90%9C%E7%B4%A2%E5%BB%BA%E8%AE%AE/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p>在使用下拉框时，很多场景需要用到远程搜索获取列表结果，并进行输入提示，这就可以用到<a href="https://element.eleme.cn/#/zh-CN/component/input">el-autocomplete</a></p></blockquote><h3 id="使用实例"><a href="#使用实例" class="headerlink" title="使用实例"></a>使用实例</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">el-autocomplete</span></span></span><br><span class="line"><span class="tag">  <span class="attr">v-model</span>=<span class="string">&quot;model&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">:fetch-suggestions</span>=<span class="string">&quot;searchChange&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">placeholder</span>=<span class="string">&quot;placeholder&quot;</span></span></span><br><span class="line"><span class="tag">  @<span class="attr">keyup.enter.native</span>=<span class="string">&quot;function&quot;</span></span></span><br><span class="line"><span class="tag">  @<span class="attr">select</span>=<span class="string">&quot;handleSelect&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">clearable</span> </span></span><br><span class="line"><span class="tag">  <span class="attr">size</span>=<span class="string">&quot;small&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">suffix-icon</span>=<span class="string">&quot;el-icon-search&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">el-autocomplete</span>&gt;</span></span><br></pre></td></tr></table></figure><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">searchLecturerChange</span>(<span class="params">query, done</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (query.<span class="property">length</span> &lt; <span class="number">1</span>) <span class="keyword">return</span>;</span><br><span class="line">  <span class="keyword">let</span> _this = <span class="variable language_">this</span></span><br><span class="line">  <span class="keyword">let</span> params = &#123;</span><br><span class="line">    <span class="title class_">Param</span>: query,</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">getList</span>(params).<span class="title function_">then</span>(<span class="function"><span class="params">response</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (response.<span class="property">status</span> == <span class="number">200</span>) &#123;</span><br><span class="line">        _this.<span class="property">list</span>= response.<span class="property">data</span>.<span class="property">data</span></span><br><span class="line">        <span class="title function_">done</span>(_this.<span class="property">list</span>)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;).<span class="title function_">catch</span>(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">        </span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;, <span class="number">500</span>);</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> Element </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Element </tag>
+            
+            <tag> 下拉框 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>data中的数据更新后视图不更新</title>
+      <link href="/2022/07/11/vue/data%E7%BB%91%E5%AE%9A%E6%95%B0%E6%8D%AE/"/>
+      <url>/2022/07/11/vue/data%E7%BB%91%E5%AE%9A%E6%95%B0%E6%8D%AE/</url>
+      
+        <content type="html"><![CDATA[<p>在进行数据处理时，我们对data中已经声明的数据做了更新处理，但与之相对应的视图却未更新。</p><h3 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h3><ul><li>数据嵌套层数过多导致的。</li><li>当vue的data里面声明或者已经赋值过的对象或数组（包含对象值），向对象里面添加新的属性和更新这个新属性的值，页面视图是不会更新的。</li></ul><h3 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h3><blockquote><p>方法一：使用Object.assign(target, …sources)。</p></blockquote><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="property">obj</span> = <span class="title class_">Object</span>.<span class="title function_">assign</span>(&#123;&#125;, obj);</span><br></pre></td></tr></table></figure><blockquote><p>方法二：使用this.$set(obj,key,value)。</p></blockquote><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">this</span>.$set(obj,’key’,temp);</span><br></pre></td></tr></table></figure><p>使用以上两种方法为对象添加属性，对象上会增加get&#x2F;set方法，再次操作该数据时就会引起数据的更新。</p><blockquote><p>方法三： 使用this.$forceUpdate() 强制刷新数据</p></blockquote><blockquote><p>方法四：使用watch监听数据变化</p></blockquote><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">watch</span>: &#123;</span><br><span class="line">  <span class="string">&#x27;obj&#x27;</span>: &#123;</span><br><span class="line">    <span class="title function_">handler</span>(<span class="params">newVal, oldVal</span>)&#123;</span><br><span class="line">      <span class="variable language_">this</span>.$forceUpdate();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure><blockquote><p>方法五： 使用:key属性， 加入一个键保证每次数据刷新都会重新渲染视图</p></blockquote><p>给要重新渲染的组件提供一个:key属性，以便 Vue 知道特定的组件与特定的数据片段相关联。如果key保持不变，则不会更改组件，但是如果key发生更改，Vue 就会删除旧组件并创建新组件</p><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">v-card</span> <span class="attr">:key</span>=<span class="string">&quot;key&quot;</span>&gt;</span></span><br><span class="line">  &#123;&#123;this.message&#125;&#125;</span><br><span class="line">  <span class="tag">&lt;<span class="name">v-btn</span> @<span class="attr">click</span>=<span class="string">&#x27;&#x27;</span>&gt;</span>修改<span class="tag">&lt;/<span class="name">v-btn</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">v-card</span>&gt;</span></span><br></pre></td></tr></table></figure><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="title function_">data</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="attr">key</span>: <span class="number">0</span>,</span><br><span class="line">      <span class="attr">message</span>: <span class="string">&#x27;旧消息&#x27;</span></span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">methods</span>: &#123;</span><br><span class="line">    <span class="title function_">change</span>(<span class="params"></span>) &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">message</span> = <span class="string">&#x27;新消息&#x27;</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">key</span> += <span class="number">1</span>;  </span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> vue </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 踩坑 </tag>
+            
+            <tag> vue </tag>
+            
+            <tag> 数据 </tag>
+            
+            <tag> 视图 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>数据赋值给新变量后，新变量会随原数据的改变而改变</title>
+      <link href="/2022/07/11/vue/%E5%8F%98%E9%87%8F%E8%B5%8B%E5%80%BC/"/>
+      <url>/2022/07/11/vue/%E5%8F%98%E9%87%8F%E8%B5%8B%E5%80%BC/</url>
+      
+        <content type="html"><![CDATA[<p>在进行数据操作时，我们常常需要一个临时变量存储原数据来防止原数据丢失，或在某些事件处理时需还原原数据。</p><p>但是在实际操作时会发现，给新变量赋值后未对新变量进行处理，但新变量仍然会受原数据的影响而改变（和java中的引用传递相似）。</p><h3 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h3><blockquote><p>在js中具有两种数据类型：原始值和对象。</p></blockquote><ul><li>原始值：number、string、boolean、null、undefined、symbol（ES6）</li><li>对象：object、function（函数实际也是对象）<blockquote><p>使用this.obj2 &#x3D; this.obj1 的方式赋值是浅复制，只是复制了栈内存中的对象地址，并不是这个对象的实际值。</p></blockquote></li></ul><h3 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h3><blockquote><p>深复制：JSON.parse配合JSON.stringify，赋值时先将obj转成json再转回obj(此方法不适用于function)</p></blockquote><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="property">obj2</span> = <span class="title class_">JSON</span>.<span class="title function_">parse</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(<span class="variable language_">this</span>.<span class="property">obj1</span>));</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> vue </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 踩坑 </tag>
+            
+            <tag> vue </tag>
+            
+            <tag> 数据 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>在vue中使用:class，在不同条件下使用不同样式</title>
+      <link href="/2022/07/11/vue/%E5%8A%A8%E6%80%81%E6%A0%B7%E5%BC%8F/"/>
+      <url>/2022/07/11/vue/%E5%8A%A8%E6%80%81%E6%A0%B7%E5%BC%8F/</url>
+      
+        <content type="html"><![CDATA[<p>记录一下自己常用的两种动态样式绑定方式</p><blockquote><p>三元表达式判断,适用于需求较为简单的动态样式</p></blockquote><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:class=&quot;status ? &#x27;css1&#x27; : &#x27;css2&#x27;&quot;</span><br></pre></td></tr></table></figure><blockquote><p>在单独的组件中，我们也可以使用类名拼接的方式</p></blockquote><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:class=&quot;[`color-$&#123;config&#125;`]&quot;</span><br></pre></td></tr></table></figure><blockquote><p>类名数组，适用于复杂的动态样式，例如在公共组件中使用</p></blockquote><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:class = &quot;[&#x27;css&#x27;,&#123;css1:(条件1),css2:(条件2)&#125;]&quot;</span><br></pre></td></tr></table></figure><blockquote><p>当需求过于复杂时，可以考虑结合过滤器实现</p></blockquote><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:class=&quot;item.List | className&quot;</span><br></pre></td></tr></table></figure><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">filters</span>: &#123;</span><br><span class="line">  <span class="title function_">className</span>(<span class="params">data</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (_.<span class="title function_">isEmpty</span>(data)) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> &#123; length &#125; = data;</span><br><span class="line">    <span class="keyword">let</span> className = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">    <span class="keyword">if</span> (length === <span class="number">1</span>) &#123;</span><br><span class="line">    className = <span class="string">&#x27;class1&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (length === <span class="number">2</span>) &#123;</span><br><span class="line">    className = <span class="string">&#x27;class2&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (length &gt;= <span class="number">3</span>) &#123;</span><br><span class="line">    className = <span class="string">&#x27;class3&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> className;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> vue </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> vue </tag>
+            
+            <tag> CSS </tag>
+            
+            <tag> 样式 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CSS设置样式为水平居中对齐</title>
+      <link href="/2022/07/11/css/%E6%B0%B4%E5%B9%B3%E5%B1%85%E4%B8%AD/"/>
+      <url>/2022/07/11/css/%E6%B0%B4%E5%B9%B3%E5%B1%85%E4%B8%AD/</url>
+      
+        <content type="html"><![CDATA[<p>我们想让内容水平居中对齐展示，我常用的有以下几种方法<code>（不全可以帮忙在评论区补充，谢谢!）</code></p><blockquote><p>方法1：margin: 0 auto;</p></blockquote><blockquote><p>方法2：<br>父元素：<br>text-align: center;<br>子元素：<br>display: inline-block&#x2F;display: inline;(行内块级&#x2F;行内元素)</p></blockquote><blockquote><p>方法3：<br>父元素：<br>position: relative;(相对定位&#x2F;绝对定位)<br>子元素：<br>position: absolute;(绝对定位)<br>transforn: translateX(-50%)&#x2F;margin-left: -width&#x2F;2;</p></blockquote><blockquote><p>方法4：<br>父元素：<br>display: flex;<br>flex-direction: column;<br>子元素：<br>align-self: center;</p></blockquote>]]></content>
+      
+      
+      <categories>
+          
+          <category> CSS </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> CSS </tag>
+            
+            <tag> 样式 </tag>
+            
+            <tag> 定位 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Element UI 表单的自定义校验</title>
+      <link href="/2022/07/09/Element/%E8%87%AA%E5%AE%9A%E4%B9%89%E8%A1%A8%E5%8D%95%E6%A0%A1%E9%AA%8C/"/>
+      <url>/2022/07/09/Element/%E8%87%AA%E5%AE%9A%E4%B9%89%E8%A1%A8%E5%8D%95%E6%A0%A1%E9%AA%8C/</url>
+      
+        <content type="html"><![CDATA[<h3 id="代码实例-以el-input-el-select为例"><a href="#代码实例-以el-input-el-select为例" class="headerlink" title="代码实例(以el-input+el-select为例)"></a>代码实例(以el-input+el-select为例)</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">el-form</span> <span class="attr">:rules</span>=<span class="string">&quot;rule&quot;</span> <span class="attr">ref</span>=<span class="string">&quot;ref&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">el-form-item</span> <span class="attr">label</span>=<span class="string">&quot;名称&quot;</span> <span class="attr">prop</span>=<span class="string">&quot;name&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">el-input</span> <span class="attr">v-model</span>=<span class="string">&quot;name&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">el-input</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">el-form-item</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">el-form-item</span> <span class="attr">label</span>=<span class="string">&quot;下拉框&quot;</span> <span class="attr">prop</span>=<span class="string">&quot;select&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">el-select</span> </span></span><br><span class="line"><span class="tag">      <span class="attr">remote</span> </span></span><br><span class="line"><span class="tag">      <span class="attr">filterable</span> </span></span><br><span class="line"><span class="tag">      <span class="attr">v-model</span>=<span class="string">&quot;type&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">el-option</span> </span></span><br><span class="line"><span class="tag">        <span class="attr">v-for</span>=<span class="string">&quot;(item, index) in list&quot;</span> </span></span><br><span class="line"><span class="tag">        <span class="attr">:key</span>=<span class="string">&quot;index&quot;</span> </span></span><br><span class="line"><span class="tag">        <span class="attr">:label</span>=<span class="string">&quot;item.label&quot;</span> </span></span><br><span class="line"><span class="tag">        <span class="attr">:value</span>=<span class="string">&quot;item.value&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">el-option</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">el-select</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">el-form-item</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">el-form</span>&gt;</span></span><br></pre></td></tr></table></figure><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">data</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">valid</span> = (<span class="params">rule, value, callback</span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (condition) &#123;</span><br><span class="line">      <span class="title function_">callback</span>(<span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&#x27;message&#x27;</span>));</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="title function_">callback</span>();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">rule</span>: &#123;</span><br><span class="line">      <span class="attr">name</span>: [</span><br><span class="line">        &#123; <span class="attr">required</span>: <span class="literal">true</span>, <span class="attr">message</span>: <span class="string">&quot;请填写名称&quot;</span>, <span class="attr">trigger</span>: <span class="string">&#x27;blur&#x27;</span> &#125;,</span><br><span class="line">      ],</span><br><span class="line">      <span class="attr">select</span>: [</span><br><span class="line">        &#123; <span class="attr">required</span>: <span class="literal">true</span>, <span class="attr">validator</span>: valid, <span class="attr">trigger</span>: [<span class="string">&#x27;blur&#x27;</span>, <span class="string">&#x27;change&#x27;</span>]&#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><blockquote><p>判断表单校验是否全部通过</p></blockquote><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">ref</span>.<span class="title function_">validate</span>(<span class="function">(<span class="params">valid</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (valid) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">$message</span>.<span class="title function_">success</span>(<span class="string">&#x27;message&#x27;</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">$message</span>.<span class="title function_">error</span>(<span class="string">&#x27;message&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure><blockquote><p>指定表单进行校验</p></blockquote><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">ref</span>.<span class="title function_">validateField</span>(<span class="string">&#x27;name&#x27;</span>);</span><br></pre></td></tr></table></figure><blockquote><p>清空校验消息</p></blockquote><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">ref</span>.<span class="title function_">clearValidate</span>();</span><br></pre></td></tr></table></figure><blockquote><p>重置表单内容</p></blockquote><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="property">$refs</span>[<span class="string">&#x27;name&#x27;</span>].<span class="title function_">resetField</span>();</span><br><span class="line">或</span><br><span class="line"><span class="variable language_">this</span>.<span class="property">$refs</span>.<span class="property">ref</span>.<span class="title function_">resetFields</span>();</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> Element </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Element </tag>
+            
+            <tag> 表单 </tag>
+            
+            <tag> 校验 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>vue生命周期钩子函数及watch数据监听的执行时机</title>
+      <link href="/2022/07/09/vue/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/"/>
+      <url>/2022/07/09/vue/%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/</url>
+      
+        <content type="html"><![CDATA[<h3 id="vue生命周期"><a href="#vue生命周期" class="headerlink" title="vue生命周期"></a>vue生命周期</h3><p><img src="https://cn.vuejs.org/images/lifecycle.png" alt="vue生命周期图示"></p><ul><li>执行顺序<blockquote><p>beforeRouteEnter(路由跳转前) -&gt; BeforeCreate(创建前) -&gt; create(创建后) -&gt; beforeMount(加载前) -&gt; mounted(加载后) -&gt; beforeUpdate(更新前) -&gt; updated(更新后) -&gt; beforeDestory(销毁前) -&gt; destoryed(销毁后) -&gt; activated(组件激活) -&gt; deactivated(组件未激活) -&gt; errorCaptured(错误调用)</p></blockquote></li><li>钩子函数<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">beforeRouteEnter</span>(<span class="params">to, <span class="keyword">from</span>, next</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">from</span>.<span class="property">name</span> !== <span class="string">&#x27;route-name&#x27;</span>) &#123;</span><br><span class="line">    <span class="title function_">next</span>(<span class="function">(<span class="params">vm</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="title class_">Function</span>();</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="title function_">next</span>();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure></li></ul><h3 id="watch监听"><a href="#watch监听" class="headerlink" title="watch监听"></a>watch监听</h3><blockquote><p>在生命周期的图示中，init reactivity是晚于beforeCreate但是早于created的。<br>watch加了immediate: true，应当同init reactivity周期一同执行，会早于created执行。<br>而正常的watch，则是mounted周期后触发data changes的周期执行，晚于created。</p></blockquote><ul><li>immediate</li></ul><p>watch 的一个特点是，默认最初绑定的时候是不会执行的，要等到值改变时才执行监听计算。<br>设置immediate为true后，被监听值初始化的时候就会执行监听函数，也就页面上的数据还未变化的时候</p><ul><li>deep</li></ul><p>当需要监听对象的改变时，此时就需要设置deep为true，不论其被嵌套多深，改变对象中的属性值能够触发监听，改变整个监听值也会触发。</p><p>deep的意思就是深入观察，监听器会一层层的往下遍历，给对象的所有属性都加上这个监听器，但是这样性能开销就会非常大了，任何修改obj里面任何一个属性都会触发这个监听器里的 handler。</p><p>优化，我们可以是使用字符串形式监听</p><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">watch</span>: &#123;</span><br><span class="line">  <span class="string">&#x27;obj.a&#x27;</span>: &#123;</span><br><span class="line">    <span class="title function_">handler</span>(<span class="params">newName, oldName</span>) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;obj.a changed&#x27;</span>);</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">immediate</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="comment">// deep: true</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> vue </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> vue </tag>
+            
+            <tag> 生命周期 </tag>
+            
+            <tag> 数据监听 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+  
+  
+</search>

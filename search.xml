@@ -183,6 +183,35 @@
     
     
     <entry>
+      <title>CSS设置样式为水平居中对齐</title>
+      <link href="/2022/07/11/css/%E6%B0%B4%E5%B9%B3%E5%B1%85%E4%B8%AD/"/>
+      <url>/2022/07/11/css/%E6%B0%B4%E5%B9%B3%E5%B1%85%E4%B8%AD/</url>
+      
+        <content type="html"><![CDATA[<p>我们想让内容水平居中对齐展示，我常用的有以下几种方法<code>（不全可以帮忙在评论区补充，谢谢!）</code></p><blockquote><p>方法1：margin: 0 auto;</p></blockquote><blockquote><p>方法2：<br>父元素：<br>text-align: center;<br>子元素：<br>display: inline-block&#x2F;display: inline;(行内块级&#x2F;行内元素)</p></blockquote><blockquote><p>方法3：<br>父元素：<br>position: relative;(相对定位&#x2F;绝对定位)<br>子元素：<br>position: absolute;(绝对定位)<br>transforn: translateX(-50%)&#x2F;margin-left: -width&#x2F;2;</p></blockquote><blockquote><p>方法4：<br>父元素：<br>display: flex;<br>flex-direction: column;<br>子元素：<br>align-self: center;</p></blockquote>]]></content>
+      
+      
+      <categories>
+          
+          <category> CSS </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> CSS </tag>
+            
+            <tag> 样式 </tag>
+            
+            <tag> 定位 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>data中的数据更新后视图不更新</title>
       <link href="/2022/07/11/vue/data%E7%BB%91%E5%AE%9A%E6%95%B0%E6%8D%AE/"/>
       <url>/2022/07/11/vue/data%E7%BB%91%E5%AE%9A%E6%95%B0%E6%8D%AE/</url>
@@ -214,6 +243,35 @@
     
     
     <entry>
+      <title>在vue中使用:class，在不同条件下使用不同样式</title>
+      <link href="/2022/07/11/vue/%E5%8A%A8%E6%80%81%E6%A0%B7%E5%BC%8F/"/>
+      <url>/2022/07/11/vue/%E5%8A%A8%E6%80%81%E6%A0%B7%E5%BC%8F/</url>
+      
+        <content type="html"><![CDATA[<p>记录一下自己常用的两种动态样式绑定方式</p><blockquote><p>三元表达式判断,适用于需求较为简单的动态样式</p></blockquote><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:class=&quot;status ? &#x27;css1&#x27; : &#x27;css2&#x27;&quot;</span><br></pre></td></tr></table></figure><blockquote><p>在单独的组件中，我们也可以使用类名拼接的方式</p></blockquote><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:class=&quot;[`color-$&#123;config&#125;`]&quot;</span><br></pre></td></tr></table></figure><blockquote><p>类名数组，适用于复杂的动态样式，例如在公共组件中使用</p></blockquote><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:class = &quot;[&#x27;css&#x27;,&#123;css1:(条件1),css2:(条件2)&#125;]&quot;</span><br></pre></td></tr></table></figure><blockquote><p>当需求过于复杂时，可以考虑结合过滤器实现</p></blockquote><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:class=&quot;item.List | className&quot;</span><br></pre></td></tr></table></figure><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">filters</span>: &#123;</span><br><span class="line">  <span class="title function_">className</span>(<span class="params">data</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (_.<span class="title function_">isEmpty</span>(data)) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> &#123; length &#125; = data;</span><br><span class="line">    <span class="keyword">let</span> className = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">    <span class="keyword">if</span> (length === <span class="number">1</span>) &#123;</span><br><span class="line">    className = <span class="string">&#x27;class1&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (length === <span class="number">2</span>) &#123;</span><br><span class="line">    className = <span class="string">&#x27;class2&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (length &gt;= <span class="number">3</span>) &#123;</span><br><span class="line">    className = <span class="string">&#x27;class3&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> className;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> vue </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> CSS </tag>
+            
+            <tag> 样式 </tag>
+            
+            <tag> vue </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>数据赋值给新变量后，新变量会随原数据的改变而改变</title>
       <link href="/2022/07/11/vue/%E5%8F%98%E9%87%8F%E8%B5%8B%E5%80%BC/"/>
       <url>/2022/07/11/vue/%E5%8F%98%E9%87%8F%E8%B5%8B%E5%80%BC/</url>
@@ -235,64 +293,6 @@
             <tag> vue </tag>
             
             <tag> 数据 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>在vue中使用:class，在不同条件下使用不同样式</title>
-      <link href="/2022/07/11/vue/%E5%8A%A8%E6%80%81%E6%A0%B7%E5%BC%8F/"/>
-      <url>/2022/07/11/vue/%E5%8A%A8%E6%80%81%E6%A0%B7%E5%BC%8F/</url>
-      
-        <content type="html"><![CDATA[<p>记录一下自己常用的两种动态样式绑定方式</p><blockquote><p>三元表达式判断,适用于需求较为简单的动态样式</p></blockquote><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:class=&quot;status ? &#x27;css1&#x27; : &#x27;css2&#x27;&quot;</span><br></pre></td></tr></table></figure><blockquote><p>在单独的组件中，我们也可以使用类名拼接的方式</p></blockquote><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:class=&quot;[`color-$&#123;config&#125;`]&quot;</span><br></pre></td></tr></table></figure><blockquote><p>类名数组，适用于复杂的动态样式，例如在公共组件中使用</p></blockquote><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:class = &quot;[&#x27;css&#x27;,&#123;css1:(条件1),css2:(条件2)&#125;]&quot;</span><br></pre></td></tr></table></figure><blockquote><p>当需求过于复杂时，可以考虑结合过滤器实现</p></blockquote><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:class=&quot;item.List | className&quot;</span><br></pre></td></tr></table></figure><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">filters</span>: &#123;</span><br><span class="line">  <span class="title function_">className</span>(<span class="params">data</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (_.<span class="title function_">isEmpty</span>(data)) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> &#123; length &#125; = data;</span><br><span class="line">    <span class="keyword">let</span> className = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">    <span class="keyword">if</span> (length === <span class="number">1</span>) &#123;</span><br><span class="line">    className = <span class="string">&#x27;class1&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (length === <span class="number">2</span>) &#123;</span><br><span class="line">    className = <span class="string">&#x27;class2&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (length &gt;= <span class="number">3</span>) &#123;</span><br><span class="line">    className = <span class="string">&#x27;class3&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> className;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>]]></content>
-      
-      
-      <categories>
-          
-          <category> vue </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> vue </tag>
-            
-            <tag> CSS </tag>
-            
-            <tag> 样式 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>CSS设置样式为水平居中对齐</title>
-      <link href="/2022/07/11/css/%E6%B0%B4%E5%B9%B3%E5%B1%85%E4%B8%AD/"/>
-      <url>/2022/07/11/css/%E6%B0%B4%E5%B9%B3%E5%B1%85%E4%B8%AD/</url>
-      
-        <content type="html"><![CDATA[<p>我们想让内容水平居中对齐展示，我常用的有以下几种方法<code>（不全可以帮忙在评论区补充，谢谢!）</code></p><blockquote><p>方法1：margin: 0 auto;</p></blockquote><blockquote><p>方法2：<br>父元素：<br>text-align: center;<br>子元素：<br>display: inline-block&#x2F;display: inline;(行内块级&#x2F;行内元素)</p></blockquote><blockquote><p>方法3：<br>父元素：<br>position: relative;(相对定位&#x2F;绝对定位)<br>子元素：<br>position: absolute;(绝对定位)<br>transforn: translateX(-50%)&#x2F;margin-left: -width&#x2F;2;</p></blockquote><blockquote><p>方法4：<br>父元素：<br>display: flex;<br>flex-direction: column;<br>子元素：<br>align-self: center;</p></blockquote>]]></content>
-      
-      
-      <categories>
-          
-          <category> CSS </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> CSS </tag>
-            
-            <tag> 样式 </tag>
-            
-            <tag> 定位 </tag>
             
         </tags>
       

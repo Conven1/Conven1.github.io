@@ -1,0 +1,17 @@
+#page-header {
+    background: transparent;
+}
+
+#footer {
+    background: transparent;
+}
+
+#footer-wrap {
+    color: var(--light-grey);
+}
+
+/* #web_bg {
+    background: url(https://p9.toutiaoimg.com/origin/pgc-image/79dc90995f0a43db9be250f35c4e2453);
+    background-repeat: no-repeat;
+    background-size: cover;
+} */

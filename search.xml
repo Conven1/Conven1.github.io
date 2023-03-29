@@ -261,8 +261,6 @@
             
             <tag> Element </tag>
             
-            <tag> file </tag>
-            
         </tags>
       
     </entry>
@@ -713,8 +711,6 @@
             
             <tag> Element </tag>
             
-            <tag> 下拉框 </tag>
-            
         </tags>
       
     </entry>
@@ -764,8 +760,6 @@
         <tags>
             
             <tag> Element </tag>
-            
-            <tag> 下拉框 </tag>
             
         </tags>
       
@@ -893,10 +887,6 @@
         <tags>
             
             <tag> Element </tag>
-            
-            <tag> 表单 </tag>
-            
-            <tag> 校验 </tag>
             
         </tags>
       

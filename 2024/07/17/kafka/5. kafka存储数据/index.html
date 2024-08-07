@@ -7,7 +7,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg">
 <meta property="article:published_time" content="2024-07-17T05:36:51.000Z">
-<meta property="article:modified_time" content="2024-08-07T09:24:05.358Z">
+<meta property="article:modified_time" content="2024-08-07T09:26:58.902Z">
 <meta property="article:author" content="Kyle Song">
 <meta property="article:tag" content="kafka">
 <meta name="twitter:card" content="summary">
@@ -53,7 +53,7 @@
   isHome: false,
   isHighlightShrink: false,
   isToc: true,
-  postUpdate: '2024-08-07 17:24:05'
+  postUpdate: '2024-08-07 17:26:58'
 }</script><noscript><style type="text/css">
   #nav {
     opacity: 1
@@ -142,23 +142,25 @@
       }
     }
     detectApple()
-    })(window)</script><link rel="stylesheet" href="/css/style.css"><meta name="generator" content="Hexo 6.2.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/./img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">46</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">射手座的程序员</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">kafka存储数据</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-07-17T05:36:51.000Z" title="发表于 2024-07-17 13:36:51">2024-07-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-08-07T09:24:05.358Z" title="更新于 2024-08-07 17:24:05">2024-08-07</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/kafka/">kafka</a></span></div><div class="meta-secondline"></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="存储数据流程"><a href="#存储数据流程" class="headerlink" title="存储数据流程"></a>存储数据流程</h2><ul>
+    })(window)</script><link rel="stylesheet" href="/css/style.css"><meta name="generator" content="Hexo 6.2.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/./img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">46</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">射手座的程序员</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">kafka存储数据</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-07-17T05:36:51.000Z" title="发表于 2024-07-17 13:36:51">2024-07-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-08-07T09:26:58.902Z" title="更新于 2024-08-07 17:26:58">2024-08-07</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/kafka/">kafka</a></span></div><div class="meta-secondline"></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="存储数据流程"><a href="#存储数据流程" class="headerlink" title="存储数据流程"></a>存储数据流程</h2><ol>
 <li>ACKS校验</li>
 <li>内部主题校验：Kafka为了管理的需要，创建了2个内部主题，用于事务处理的__transaction_state内部主题和用于处理消费者偏移量的__consumer_offsets内部主题，<br>生产者无法对这两个主题生产数据，在存储数据之前，需要对主题名称进行校验有效性校验。</li>
 <li>ACKS应答及副本数量关系校验：当生产者Producer要求的数据ACKS应答为-1时，需要对ISR列表中的副本数量进行约束，至少不能少于2个。</li>
 <li>日志文件滚动判断：<blockquote>
 <p>副本数据文件并不是一个完整的大的数据文件，而是根据某些条件分成很多的小文件，每个小文件我们称之为文件段。</p>
 </blockquote>
-<ol>
+</li>
+</ol>
+<ul>
 <li><code>log.segment.bytes</code>(默认1G)文件字节分段大小：当日志段剩余容量无法容纳新消息集合，日志文件就会滚动生产新的。</li>
 <li><code>log.roll.ms</code>(默认null),<code>log.roll.hours</code>数据停留时间(默认7天)：时间间隔达到阈值，日志文件就会滚动生产新的。</li>
 <li>索引文件或时间索引文件满了，日志文件就会滚动生产新的。</li>
-</ol>
-</li>
+</ul>
+<ol start="5">
 <li>请求数据重复性校验：数据重复问题。</li>
 <li>请求数据序列号校验：数据乱序问题。</li>
 <li>数据存储：数据通过LogSegment中FileChannel对象。将数据写入日志文件，写入完成后，更新当前日志文件的数据偏移量。</li>
-</ul>
+</ol>
 <h2 id="存储文件类型"><a href="#存储文件类型" class="headerlink" title="存储文件类型"></a>存储文件类型</h2><ul>
 <li>.log数据日志文件，文件名称为20位的数字字符串值为当前日志文件起始数据的偏移量。</li>
 <li>.index数据索引文件，保存逻辑偏移量和物理偏移量位置的关系，<code>log.index.interval.bytes</code>(默认4K)记录索引日志数据大小阈值。</li>

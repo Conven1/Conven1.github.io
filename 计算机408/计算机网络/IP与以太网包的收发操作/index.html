@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>IP与以太网包的收发操作 | 射手座的程序员</title><meta name="keywords" content="射手座 程序员 blog 博客"><meta name="author" content="Kyle Song"><meta name="copyright" content="Kyle Song"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="TCP模块再数据前加上TCP头部，传递给IP模块IP模块会添加IP头部和MAC头部，封装成一个包生成包含接收方IP地址的IP头部IP模块接受TCP模块的委托进行包的收发操作，生成IP头部并加在TCP头部前面，IP头部中主要包含接收方的IP地址、发送方的IP地址  IP 头部的“接收方 IP 地址”填写通信对象的 IP 地址。 发送方 IP 地址需要判断发送所使用的网卡，并填写该网卡的 IP 地址">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>IP与以太网包的收发操作 | 射手座的程序员</title><meta name="keywords" content="射手座的程序员"><meta name="author" content="Kyle Song"><meta name="copyright" content="Kyle Song"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="TCP模块再数据前加上TCP头部，传递给IP模块IP模块会添加IP头部和MAC头部，封装成一个包生成包含接收方IP地址的IP头部IP模块接受TCP模块的委托进行包的收发操作，生成IP头部并加在TCP头部前面，IP头部中主要包含接收方的IP地址、发送方的IP地址  IP 头部的“接收方 IP 地址”填写通信对象的 IP 地址。 发送方 IP 地址需要判断发送所使用的网卡，并填写该网卡的 IP 地址">
 <meta property="og:type" content="article">
 <meta property="og:title" content="IP与以太网包的收发操作">
 <meta property="og:url" content="https://conven1.github.io/%E8%AE%A1%E7%AE%97%E6%9C%BA408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/IP%E4%B8%8E%E4%BB%A5%E5%A4%AA%E7%BD%91%E5%8C%85%E7%9A%84%E6%94%B6%E5%8F%91%E6%93%8D%E4%BD%9C/index.html">
@@ -9,7 +9,7 @@
 <meta property="article:published_time" content="2022-12-05T05:36:51.000Z">
 <meta property="article:modified_time" content="2024-08-01T01:17:54.501Z">
 <meta property="article:author" content="Kyle Song">
-<meta property="article:tag" content="射手座 程序员 blog 博客">
+<meta property="article:tag" content="射手座的程序员">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://conven1.github.io/%E8%AE%A1%E7%AE%97%E6%9C%BA408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/IP%E4%B8%8E%E4%BB%A5%E5%A4%AA%E7%BD%91%E5%8C%85%E7%9A%84%E6%94%B6%E5%8F%91%E6%93%8D%E4%BD%9C/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
   root: '/',

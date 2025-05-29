@@ -1,4 +1,7 @@
 https://conven1.github.io/Curriculum%20vitae/Project%20analysis/
+https://conven1.github.io/java/io/%E8%A7%A3%E6%9E%90Txt%E7%9A%84json/
+https://conven1.github.io/java/Notification/ReadEmail/
+https://conven1.github.io/java/Notification/SendEmail/
 https://conven1.github.io/java/SpringBoot3.0/%E7%89%88%E6%9C%AC%E5%8D%87%E7%BA%A7/
 https://conven1.github.io/Curriculum%20vitae/%E6%8A%80%E8%83%BD/
 https://conven1.github.io/kafka/8.%20kafka%E9%9D%A2%E8%AF%95%E6%B1%87%E6%80%BB/
@@ -69,6 +72,8 @@ https://conven1.github.io/tags/Java/
 https://conven1.github.io/tags/Vue/
 https://conven1.github.io/tags/Curriculum-vitae/
 https://conven1.github.io/tags/SpringBoot/
+https://conven1.github.io/tags/Email/
+https://conven1.github.io/tags/Java-IO/
 https://conven1.github.io/categories/blog/
 https://conven1.github.io/categories/MySql/
 https://conven1.github.io/categories/js/
@@ -80,3 +85,5 @@ https://conven1.github.io/categories/Vue/
 https://conven1.github.io/categories/kafka/
 https://conven1.github.io/categories/Curriculum-vitae/
 https://conven1.github.io/categories/SpringBoot/
+https://conven1.github.io/categories/Email/
+https://conven1.github.io/categories/Java-IO/

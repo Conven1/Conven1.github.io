@@ -4,7 +4,34 @@
   <url>
     <loc>https://conven1.github.io/Curriculum%20vitae/Project%20analysis/</loc>
     
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-05-29</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://conven1.github.io/java/io/%E8%A7%A3%E6%9E%90Txt%E7%9A%84json/</loc>
+    
+    <lastmod>2025-05-29</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://conven1.github.io/java/Notification/ReadEmail/</loc>
+    
+    <lastmod>2025-05-19</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://conven1.github.io/java/Notification/SendEmail/</loc>
+    
+    <lastmod>2025-05-19</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -526,7 +553,7 @@
 
   <url>
     <loc>https://conven1.github.io/</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-05-29</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -534,84 +561,98 @@
   
   <url>
     <loc>https://conven1.github.io/tags/MySql/</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-05-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://conven1.github.io/tags/js/</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-05-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://conven1.github.io/tags/redis/</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-05-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://conven1.github.io/tags/JVM/</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-05-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://conven1.github.io/tags/CSS/</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-05-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://conven1.github.io/tags/%E8%85%BE%E8%AE%AF%E4%BA%91/</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-05-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://conven1.github.io/tags/%E9%98%BF%E9%87%8C%E4%BA%91/</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-05-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://conven1.github.io/tags/kafka/</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-05-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://conven1.github.io/tags/Java/</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-05-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://conven1.github.io/tags/Vue/</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-05-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://conven1.github.io/tags/Curriculum-vitae/</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-05-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://conven1.github.io/tags/SpringBoot/</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-05-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://conven1.github.io/tags/Email/</loc>
+    <lastmod>2025-05-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://conven1.github.io/tags/Java-IO/</loc>
+    <lastmod>2025-05-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -620,77 +661,91 @@
   
   <url>
     <loc>https://conven1.github.io/categories/blog/</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-05-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://conven1.github.io/categories/MySql/</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-05-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://conven1.github.io/categories/js/</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-05-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://conven1.github.io/categories/redis/</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-05-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://conven1.github.io/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-05-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://conven1.github.io/categories/CSS/</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-05-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://conven1.github.io/categories/Java/</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-05-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://conven1.github.io/categories/Vue/</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-05-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://conven1.github.io/categories/kafka/</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-05-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://conven1.github.io/categories/Curriculum-vitae/</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-05-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://conven1.github.io/categories/SpringBoot/</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-05-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://conven1.github.io/categories/Email/</loc>
+    <lastmod>2025-05-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://conven1.github.io/categories/Java-IO/</loc>
+    <lastmod>2025-05-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>

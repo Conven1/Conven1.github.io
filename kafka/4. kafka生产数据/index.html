@@ -1,0 +1,337 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>kafka生产数据 | 射手座的程序员</title><meta name="keywords" content="kafka"><meta name="author" content="Kyle Song"><meta name="copyright" content="Kyle Song"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="ProducerRecord生产者数据 参数 topic：记录将附加到的主题 key：将包含在记录中的密钥 value：记录内容 partition：应将记录发送到的分区 timestamp：记录的时间戳，以毫秒为单位。如果为 null，则生产者将使用 System1234public ProducerRecord(String topic, Integer partition, Long tim">
+<meta property="og:type" content="article">
+<meta property="og:title" content="kafka生产数据">
+<meta property="og:url" content="https://conven1.github.io/kafka/4.%20kafka%E7%94%9F%E4%BA%A7%E6%95%B0%E6%8D%AE/index.html">
+<meta property="og:site_name" content="射手座的程序员">
+<meta property="og:description" content="ProducerRecord生产者数据 参数 topic：记录将附加到的主题 key：将包含在记录中的密钥 value：记录内容 partition：应将记录发送到的分区 timestamp：记录的时间戳，以毫秒为单位。如果为 null，则生产者将使用 System1234public ProducerRecord(String topic, Integer partition, Long tim">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Conven1/picode@main/kafka-logo.webp">
+<meta property="article:published_time" content="2024-07-16T05:36:51.000Z">
+<meta property="article:modified_time" content="2024-09-15T04:01:47.068Z">
+<meta property="article:author" content="Kyle Song">
+<meta property="article:tag" content="kafka">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/Conven1/picode@main/kafka-logo.webp"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://conven1.github.io/kafka/4.%20kafka%E7%94%9F%E4%BA%A7%E6%95%B0%E6%8D%AE/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'kafka生产数据',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-09-15 12:01:47'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/style.css"><meta name="generator" content="Hexo 6.2.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/./img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/gh/Conven1/picode@main/kafka-logo.webp')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">射手座的程序员</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">kafka生产数据</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2024-07-16T05:36:51.000Z" title="发表于 2024-07-16 13:36:51">2024-07-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/kafka/">kafka</a></span></div><div class="meta-secondline"></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h3 id="ProducerRecord生产者数据"><a href="#ProducerRecord生产者数据" class="headerlink" title="ProducerRecord生产者数据"></a>ProducerRecord生产者数据</h3><ul>
+<li>参数<ul>
+<li>topic：记录将附加到的主题</li>
+<li>key：将包含在记录中的密钥</li>
+<li>value：记录内容</li>
+<li>partition：应将记录发送到的分区</li>
+<li>timestamp：记录的时间戳，以毫秒为单位。如果为 null，则生产者将使用 System<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="title function_">ProducerRecord</span><span class="params">(String topic, Integer partition, Long timestamp, K key, V value)</span> &#123;&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="title function_">ProducerRecord</span><span class="params">(String topic, Integer partition, K key, V value)</span> &#123;&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="title function_">ProducerRecord</span><span class="params">(String topic, K key, V value)</span> &#123;&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="title function_">ProducerRecord</span><span class="params">(String topic, V value)</span> &#123;&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h3 id="Interceptors拦截器列表"><a href="#Interceptors拦截器列表" class="headerlink" title="Interceptors拦截器列表"></a>Interceptors拦截器列表</h3><p>当客户端将记录发送到 KafkaProducer 时，在键和值被序列化之前，对生产者数据进行拦截处理转换，根据拦截器的声明顺序进行拦截；<br>从第一个拦截器的 onSend（） 返回的 ProducerRecord 被传递给拦截器链中的第二个拦截器 onSend（），依此类推。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> Future&lt;RecordMetadata&gt; <span class="title function_">send</span><span class="params">(ProducerRecord&lt;K, V&gt; record, Callback callback)</span> &#123;</span><br><span class="line">    ProducerRecord&lt;K, V&gt; interceptedRecord = <span class="built_in">this</span>.interceptors.onSend(record);</span><br><span class="line">    <span class="keyword">return</span> doSend(interceptedRecord, callback);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> ProducerRecord&lt;K, V&gt; <span class="title function_">onSend</span><span class="params">(ProducerRecord&lt;K, V&gt; record)</span> &#123;</span><br><span class="line">    ProducerRecord&lt;K, V&gt; interceptRecord = record;</span><br><span class="line">    <span class="keyword">for</span> (ProducerInterceptor&lt;K, V&gt; interceptor : <span class="built_in">this</span>.interceptors) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            interceptRecord = interceptor.onSend(interceptRecord);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            <span class="comment">// 此方法不会引发异常。任何侦听器方法引发的异常都会被捕获并忽略</span></span><br><span class="line">            <span class="keyword">if</span> (record != <span class="literal">null</span>)</span><br><span class="line">                log.warn(<span class="string">&quot;Error executing interceptor onSend callback for topic: &#123;&#125;, partition: &#123;&#125;&quot;</span>, record.topic(), record.partition(), e);</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                log.warn(<span class="string">&quot;Error executing interceptor onSend callback&quot;</span>, e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> interceptRecord;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>自定义拦截器</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 自定义拦截器</span></span><br><span class="line"><span class="comment"> * 1. 实现ProducerInterceptor接口</span></span><br><span class="line"><span class="comment"> * 2. 定义泛型</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ValueInterceptorTest</span> <span class="keyword">implements</span> <span class="title class_">ProducerInterceptor</span>&lt;String, String&gt; &#123;</span><br><span class="line">    <span class="comment">// 发送数据时调用</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> ProducerRecord&lt;String, String&gt; <span class="title function_">onSend</span><span class="params">(ProducerRecord&lt;String, String&gt; record)</span> &#123;<span class="keyword">return</span> record;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 发送数据完毕，服务器返回响应时会调用此方法</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onAcknowledgement</span><span class="params">(RecordMetadata metadata, Exception exception)</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 生产者对象关闭时调用此方法</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">close</span><span class="params">()</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建生产者对象时调用此方法</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">configure</span><span class="params">(Map&lt;String, ?&gt; configs)</span> &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用方式,在producer配置中使用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, Object&gt; configMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">configMap.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG, ValueInterceptorTest.class.getName());</span><br></pre></td></tr></table></figure>
+
+<h3 id="Serializer序列化"><a href="#Serializer序列化" class="headerlink" title="Serializer序列化"></a>Serializer序列化</h3><ul>
+<li>写操作时，序列化的配置是必需的<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">serializedKey = keySerializer.serialize(record.topic(), record.headers(), record.key());</span><br><span class="line">serializedValue = valueSerializer.serialize(record.topic(), record.headers(), record.value());</span><br><span class="line"><span class="keyword">default</span> <span class="type">byte</span>[] serialize(String topic, Headers headers, T data) &#123;</span><br><span class="line">    <span class="keyword">return</span> serialize(topic, data);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="type">byte</span>[] serialize(String topic, String data) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (data == <span class="literal">null</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="keyword">return</span> data.getBytes(encoding);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (UnsupportedEncodingException e) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">SerializationException</span>(<span class="string">&quot;Error when serializing string to byte[] due to unsupported encoding &quot;</span> + encoding);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>自定义序列化<br>需要实现org.apache.kafka.common.serialization.Serializer接口<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 自定义序列化</span></span><br><span class="line"><span class="comment"> * 1. 实现Serializer接口</span></span><br><span class="line"><span class="comment"> * 2. 重写方法</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SerializerTest</span> <span class="keyword">implements</span> <span class="title class_">Serializer</span>&lt;String&gt; &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">byte</span>[] serialize(String topic, String data) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+使用方式,在producer配置中使用<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, Object&gt; configMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">configMap.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, SerializerTest.class.getName());</span><br><span class="line">        configMap.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, SerializerTest.class.getName());</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="Partitioner分区器"><a href="#Partitioner分区器" class="headerlink" title="Partitioner分区器"></a>Partitioner分区器</h3><ul>
+<li>通过MetadataCache元数据缓存获取到分区信息</li>
+<li>计算分区<ul>
+<li>如果写入记录有 Partition 直接返回</li>
+<li>是否定义了分区器，若有通过定义的分区器计算</li>
+<li>key是存在且<code>partitioner.ignore.keys</code>为false(默认为false)</li>
+<li>若key不存在，在accumulator数据收集器中追加数据补充，根据当前节点主题的负载情况动态的获取分区编号<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="type">int</span> <span class="title function_">partition</span><span class="params">(ProducerRecord&lt;K, V&gt; record, <span class="type">byte</span>[] serializedKey, <span class="type">byte</span>[] serializedValue, Cluster cluster)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (record.partition() != <span class="literal">null</span>)</span><br><span class="line">        <span class="keyword">return</span> record.partition();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (partitioner != <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">customPartition</span> <span class="operator">=</span> partitioner.partition(</span><br><span class="line">            record.topic(), record.key(), serializedKey, record.value(), serializedValue, cluster);</span><br><span class="line">        <span class="keyword">if</span> (customPartition &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(String.format(</span><br><span class="line">                <span class="string">&quot;The partitioner generated an invalid partition number: %d. Partition number should always be non-negative.&quot;</span>, customPartition));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> customPartition;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (serializedKey != <span class="literal">null</span> &amp;&amp; !partitionerIgnoreKeys) &#123;</span><br><span class="line">        <span class="comment">// hash the keyBytes to choose a partition</span></span><br><span class="line">        <span class="keyword">return</span> BuiltInPartitioner.partitionForKey(serializedKey, cluster.partitionsForTopic(record.topic()).size());</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> RecordMetadata.UNKNOWN_PARTITION;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// MurmurHash2 是一种高效的、非加密的哈希函数</span></span><br><span class="line"><span class="comment">// 用于计算给定消息键的哈希值，然后根据哈希值对分区数取模确定消息应该发送到的分区。</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">partitionForKey</span><span class="params">(<span class="keyword">final</span> <span class="type">byte</span>[] serializedKey, <span class="keyword">final</span> <span class="type">int</span> numPartitions)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> Utils.toPositive(Utils.murmur2(serializedKey)) % numPartitions;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 数据收集器追加数据</span></span><br><span class="line">RecordAccumulator.<span class="type">RecordAppendResult</span> <span class="variable">result</span> <span class="operator">=</span> accumulator.append(record.topic(), partition, timestamp, serializedKey, </span><br><span class="line">serializedValue, headers, appendCallbacks, remainingWaitMs, abortOnNewBatch, nowMs, cluster);</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> RecordAppendResult <span class="title function_">append</span><span class="params">(...)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (partition == RecordMetadata.UNKNOWN_PARTITION) &#123;</span><br><span class="line">        partitionInfo = topicInfo.builtInPartitioner.peekCurrentPartitionInfo(cluster);</span><br><span class="line">        effectivePartition = partitionInfo.partition();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        partitionInfo = <span class="literal">null</span>;</span><br><span class="line">        effectivePartition = partition;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 根据分区负载统计信息计算主题的下一个分区</span></span><br><span class="line"><span class="keyword">private</span> <span class="type">int</span> <span class="title function_">nextPartition</span><span class="params">(Cluster cluster)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">random</span> <span class="operator">=</span> mockRandom != <span class="literal">null</span> ? mockRandom.get() : Utils.toPositive(ThreadLocalRandom.current().nextInt());</span><br><span class="line"></span><br><span class="line">    <span class="type">PartitionLoadStats</span> <span class="variable">partitionLoadStats</span> <span class="operator">=</span> <span class="built_in">this</span>.partitionLoadStats;</span><br><span class="line">    <span class="type">int</span> partition;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 若没有分区负载情况，随机选择分区，（粘性分区策略）后续数据会尽可能往改分区添加，直至达到批次阈值batch.size = 16k</span></span><br><span class="line">    <span class="keyword">if</span> (partitionLoadStats == <span class="literal">null</span>) &#123;</span><br><span class="line">        List&lt;PartitionInfo&gt; availablePartitions = cluster.availablePartitionsForTopic(topic);</span><br><span class="line">        <span class="keyword">if</span> (availablePartitions.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            partition = availablePartitions.get(random % availablePartitions.size()).partition();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            List&lt;PartitionInfo&gt; partitions = cluster.partitionsForTopic(topic);</span><br><span class="line">            partition = random % partitions.size();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">assert</span> partitionLoadStats.length &gt; <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span>[] cumulativeFrequencyTable = partitionLoadStats.cumulativeFrequencyTable;</span><br><span class="line">        <span class="comment">// 根据使用频率生成一个权重</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">weightedRandom</span> <span class="operator">=</span> random % cumulativeFrequencyTable[partitionLoadStats.length - <span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 通过二分查找法从当前的负载情况中找到与权重相近的值</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">searchResult</span> <span class="operator">=</span> Arrays.binarySearch(cumulativeFrequencyTable, <span class="number">0</span>, partitionLoadStats.length, weightedRandom);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 根据获取的值获取发送的分区</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">partitionIndex</span> <span class="operator">=</span> Math.abs(searchResult + <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">assert</span> partitionIndex &lt; partitionLoadStats.length;</span><br><span class="line">        partition = partitionLoadStats.partitionIds[partitionIndex];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    log.trace(<span class="string">&quot;Switching to partition &#123;&#125; in topic &#123;&#125;&quot;</span>, partition, topic);</span><br><span class="line">    <span class="keyword">return</span> partition;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+自定义分区器<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 自定义分区器</span></span><br><span class="line"><span class="comment"> * 1. 实现Partitioner接口</span></span><br><span class="line"><span class="comment"> * 2. 重写方法</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PartitionerTest</span> <span class="keyword">implements</span> <span class="title class_">Partitioner</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">partition</span><span class="params">(String topic, Object key, <span class="type">byte</span>[] keyBytes, Object value, <span class="type">byte</span>[] valueBytes, Cluster cluster)</span> &#123;<span class="keyword">return</span> <span class="number">0</span>;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">close</span><span class="params">()</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">configure</span><span class="params">(Map&lt;String, ?&gt; configs)</span> &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+使用方式,在producer配置中使用<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, Object&gt; configMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">configMap.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, PartitionerTest.class.getName());</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h3 id="数据校验"><a href="#数据校验" class="headerlink" title="数据校验"></a>数据校验</h3><p>例如：  </p>
+<ul>
+<li>max.request.size &#x3D; 1m</li>
+<li>buffer.memory &#x3D; 32m<br>若数据校验通过将数据发送到RecordAccumulator数据收集器（数据缓冲区）。</li>
+</ul>
+<h3 id="RecordAccumulator数据收集器（缓冲区）"><a href="#RecordAccumulator数据收集器（缓冲区）" class="headerlink" title="RecordAccumulator数据收集器（缓冲区）"></a>RecordAccumulator数据收集器（缓冲区）</h3><ul>
+<li>消息分配到批次：生产者发送消息时，消息会被添加到RecordAccumulator中的一个批次（batch）中。每个主题的每个分区都有一个独立的批次队列。</li>
+<li>创建新批次：批次数据达到阈值<code>batch.size</code>(默认16k)，kafka底层会将该批次对象锁定关闭，并创建新的批次。</li>
+<li>消息缓存：生产者配置的<code>buffer.memory</code>(默认32m)参数决定了RecordAccumulator可以使用的最大内存。</li>
+<li>批次发送：RecordAccumulator定期检查批次队列，并将已满或超时的批次通过Sender发送线程发送到kafka Broker。<code>linger.ms</code>(默认0ms)配置发送前等待时间。</li>
+<li>重试机制：如果发送失败，RecordAccumulator会将批次重新添加到队列中，并按照生产者配置的<code>retries</code>(默认2147483647)和<code>retry.backoff.ms</code>(默认100ms)参数进行重试。</li>
+</ul>
+<h3 id="Sender发送线程"><a href="#Sender发送线程" class="headerlink" title="Sender发送线程"></a>Sender发送线程</h3><ul>
+<li>获取批次：Sender线程定期从RecordAccumulator中获取已经满或超时的批次，并根据Broker节点重新整合。</li>
+<li>发送批次：Sender线程通过网络将其发送到目标Broker。</li>
+<li>处理响应：成功响应时Sender线程会更新偏移量并从RecordAccumulator中移除已发送的批次，失败响应时Sender线程会根据配置的重试策略将批次重新添加到RecordAccumulator中。</li>
+<li>错误处理和重试：按照生产者配置的<code>retries</code>(默认2147483647)和<code>retry.backoff.ms</code>(默认100ms)参数进行重新尝试发送失败的批次。</li>
+</ul>
+<h3 id="InFlightRequests在途请求"><a href="#InFlightRequests在途请求" class="headerlink" title="InFlightRequests在途请求"></a>InFlightRequests在途请求</h3><ul>
+<li>请求添加：当Sender线程将一个批次发送到kafka Broker时，会将该请求的信息添加到InFlightRequests中。</li>
+<li>请求追踪：InFlightRequests通过内部的数据结构（通常是一个基于主题、分区的映射）来管理和追踪所有在途请求。</li>
+<li>并发控制：InFlightRequests使用<code>max.in.flight.requests.per.connection</code>(默认5)配置参数来限制每个连接上未完成请求的最大数量。<br>如果在途请求数量达到限制，新的请求将被阻止，直到已有请求得到响应。</li>
+<li>处理响应：当kafka Broker响应某个请求时，Sender线程会从InFlightRequests中移除该请求。</li>
+<li>重试机制：如果某个请求在规定时间内未能收到响应，或者收到的响应表明请求失败，InFlightRequests会标记该请求为需要重试。</li>
+</ul>
+<h3 id="请求响应"><a href="#请求响应" class="headerlink" title="请求响应"></a>请求响应</h3><ul>
+<li>callback<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 异步发送</span></span><br><span class="line">producer.send(record, <span class="keyword">new</span> <span class="title class_">Callback</span>() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onCompletion</span><span class="params">(RecordMetadata metadata, Exception exception)</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 同步发送</span></span><br><span class="line">Future&lt;RecordMetadata&gt; send = producer.send(record, <span class="keyword">new</span> <span class="title class_">Callback</span>() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onCompletion</span><span class="params">(RecordMetadata metadata, Exception exception)</span> &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line">send.get();</span><br></pre></td></tr></table></figure></li>
+<li><code>acks</code>：控制消息发送的确认机制，取值可以是 0、1 或 all&#x2F;-1(默认)。all 提供最高的可靠性，0 提供最低的延迟。<ul>
+<li>0：生产者不会等待任何确认，消息一旦发送就被认为是成功的。</li>
+<li>1：生产者会等待领导者（Leader）副本确认收到消息后才认为消息发送成功。</li>
+<li>all&#x2F;-1：生产者会等待所有同步副本确认收到消息后才认为消息发送成功。这些同步副本的数量由主题的<code>min.insync.replicas</code>(默认1)设置决定。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, Object&gt; configMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">configMap.put(ProducerConfig.ACKS_CONFIG, <span class="string">&quot;0&quot;</span>); <span class="comment">// 0, 1, -1/all</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h3 id="重试机制"><a href="#重试机制" class="headerlink" title="重试机制"></a>重试机制</h3><ul>
+<li><code>retries</code>：重试次数，默认2147483647。</li>
+<li><code>retry.backoff.ms</code>：重试等待时间，默认100ms。</li>
+<li>若副本数据存储下来后响应丢失或响应失败，仍进行重试，可能会导致数据重复。</li>
+<li>重试机制也可能会导致数据乱序问题。</li>
+<li>幂等性生产者  <ul>
+<li>为了避免数据重复和乱序问题，kafka提供了幂等性生产者，每条消息也只会被写入一次。</li>
+<li>开启幂等性的要求：acks为-1，开启重试机制，<code>max.in.flight.requests.per.connection</code>不能大于5。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, Object&gt; configMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">configMap.put(ProducerConfig.ACKS_CONFIG, <span class="string">&quot;-1&quot;</span>);</span><br><span class="line">configMap.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, <span class="literal">true</span>);</span><br></pre></td></tr></table></figure></li>
+<li>幂等性生产者只对一个分区起作用。</li>
+<li>幂等性生产者Broker实现方式(基于生产者自动生成的PID和序列号进行判重和重新排序)：<ul>
+<li>接收到消息后，会检查消息的PID（幂等性生产者实例在启动时获取一个唯一的Producer ID）和<br>序列号（消息在发送时，都有一个与之关联的序列号，序列号在每个分区内是递增的，用于跟踪每个分区内消息的顺序）。</li>
+<li>如果消息是新的（即序列号与预期匹配），Broker会处理消息并更新其缓存。</li>
+<li>如果消息是重复的（即序列号与缓存中的记录匹配），Broker会忽略该消息。</li>
+<li>如果序列号与预期不匹配，即乱序，则需要重新发送。</li>
+<li>RecordAccumulator数据收集器（缓冲区），会对需要重试的数据进行排序发送。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="事务操作"><a href="#事务操作" class="headerlink" title="事务操作"></a>事务操作</h3><ul>
+<li>底层流程<ol>
+<li>生产者向任意一个Broker节点发送FIND_COORDINATOR请求，查找事务协调器所在的节点，通过txnId.hashCode % 50计算获得</li>
+<li>生产者向事务协调器（TransactionCoordinator）发送INIT_PRODUCER_ID请求，初始化生产者ID</li>
+<li>生产者向事务协调器（TransactionCoordinator）发送ADD_PARTITIONS_TO_TXN请求，将数据的分区信息添加到事务中</li>
+<li>生产者向Broker(leader)节点发送PRODUCE请求，生产数据</li>
+<li>Broker(leader)节点向事务协调器（TransactionCoordinator）发送ADD_PARTITIONS_TO_TXN请求，提交保存成功的数据分区信息</li>
+<li>Broker(leader)节点根据acks配置返回确认响应</li>
+<li>向事务协调器（TransactionCoordinator）发送END_TXN请求，结束事务</li>
+<li>事务协调器（TransactionCoordinator）修改事务状态为PrepareCommit</li>
+<li>事务协调器（TransactionCoordinator）向Broker(leader)节点发送WRITE_TXN_MARKERS请求，Broker会将事务标记（COMMIT&#x2F;ABORT）写入到分区日志中，标记事务的最终状态</li>
+<li>事务协调器（TransactionCoordinator）修改事务状态为CompleteCommit</li>
+</ol>
+</li>
+<li>代码实现<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, Object&gt; configMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">configMap.put(ProducerConfig.ACKS_CONFIG, <span class="string">&quot;-1&quot;</span>);</span><br><span class="line">configMap.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, <span class="literal">true</span>); <span class="comment">// 幂等性是事务性生产者的基础，必须启用。</span></span><br><span class="line">configMap.put(ProducerConfig.TRANSACTIONAL_ID_CONFIG, <span class="string">&quot;txnId&quot;</span>); <span class="comment">// 事务 ID 用于唯一标识生产者的事务性操作。</span></span><br><span class="line">KafkaProducer&lt;String, String&gt; producer = <span class="keyword">new</span> <span class="title class_">KafkaProducer</span>&lt;&gt;(configMap);</span><br><span class="line"><span class="comment">// 初始化事务</span></span><br><span class="line"><span class="comment">// 包含FIND_COORDINATOR、INIT_PRODUCER_ID请求</span></span><br><span class="line">producer.initTransactions();</span><br><span class="line"><span class="comment">// 开启事务</span></span><br><span class="line">producer.beginTransaction();</span><br><span class="line"><span class="comment">// 发送数据</span></span><br><span class="line"><span class="comment">// 包含ADD_PARTITIONS_TO_TXN请求</span></span><br><span class="line">producer.send(<span class="keyword">new</span> <span class="title class_">ProducerRecord</span>&lt;&gt;(<span class="string">&quot;topic1&quot;</span>, <span class="string">&quot;key1&quot;</span>, <span class="string">&quot;value1&quot;</span>));</span><br><span class="line"><span class="comment">// 提交事务</span></span><br><span class="line"><span class="comment">// 包含END_TXN请求，此时事务状态会变成PrepareCommit，发送WRITE_TXN_MARKERS请求，WRITE_TXN_MARKERS请求处理完毕后事务状态会变成CompleteCommit</span></span><br><span class="line">producer.commitTransaction();</span><br><span class="line"><span class="comment">// 终止事务</span></span><br><span class="line">producer.abortTransaction();</span><br></pre></td></tr></table></figure></li>
+</ul>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/kafka/">kafka</a></div><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/kafka/5.%20kafka%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE/"><img class="prev-cover" src="https://cdn.jsdelivr.net/gh/Conven1/picode@main/kafka-logo.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">kafka存储数据</div></div></a></div><div class="next-post pull-right"><a href="/kafka/3.%20kafka%E4%B8%BB%E9%A2%98%E5%88%9B%E5%BB%BA/"><img class="next-cover" src="https://cdn.jsdelivr.net/gh/Conven1/picode@main/kafka-logo.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">kafka主题创建</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/kafka/1.%20kafka%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/" title="kafka的基本概念"><img class="cover" src="https://cdn.jsdelivr.net/gh/Conven1/picode@main/kafka-logo.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-13</div><div class="title">kafka的基本概念</div></div></a></div><div><a href="/kafka/2.%20kafka%E6%9C%8D%E5%8A%A1%E5%90%AF%E5%8A%A8/" title="kafka服务启动"><img class="cover" src="https://cdn.jsdelivr.net/gh/Conven1/picode@main/kafka-logo.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-14</div><div class="title">kafka服务启动</div></div></a></div><div><a href="/kafka/3.%20kafka%E4%B8%BB%E9%A2%98%E5%88%9B%E5%BB%BA/" title="kafka主题创建"><img class="cover" src="https://cdn.jsdelivr.net/gh/Conven1/picode@main/kafka-logo.webp" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-15</div><div class="title">kafka主题创建</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/./img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Kyle Song</div><div class="author-info__description">Forge ahead like a gigantic ship breaking through strong winds and heavy waves</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Conven1"><i class="fab fa-github"></i><span>关注我</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Conven1" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:kerideth@163.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#ProducerRecord%E7%94%9F%E4%BA%A7%E8%80%85%E6%95%B0%E6%8D%AE"><span class="toc-number">1.</span> <span class="toc-text">ProducerRecord生产者数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Interceptors%E6%8B%A6%E6%88%AA%E5%99%A8%E5%88%97%E8%A1%A8"><span class="toc-number">2.</span> <span class="toc-text">Interceptors拦截器列表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Serializer%E5%BA%8F%E5%88%97%E5%8C%96"><span class="toc-number">3.</span> <span class="toc-text">Serializer序列化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Partitioner%E5%88%86%E5%8C%BA%E5%99%A8"><span class="toc-number">4.</span> <span class="toc-text">Partitioner分区器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%A0%A1%E9%AA%8C"><span class="toc-number">5.</span> <span class="toc-text">数据校验</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RecordAccumulator%E6%95%B0%E6%8D%AE%E6%94%B6%E9%9B%86%E5%99%A8%EF%BC%88%E7%BC%93%E5%86%B2%E5%8C%BA%EF%BC%89"><span class="toc-number">6.</span> <span class="toc-text">RecordAccumulator数据收集器（缓冲区）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Sender%E5%8F%91%E9%80%81%E7%BA%BF%E7%A8%8B"><span class="toc-number">7.</span> <span class="toc-text">Sender发送线程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#InFlightRequests%E5%9C%A8%E9%80%94%E8%AF%B7%E6%B1%82"><span class="toc-number">8.</span> <span class="toc-text">InFlightRequests在途请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82%E5%93%8D%E5%BA%94"><span class="toc-number">9.</span> <span class="toc-text">请求响应</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E8%AF%95%E6%9C%BA%E5%88%B6"><span class="toc-number">10.</span> <span class="toc-text">重试机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E6%93%8D%E4%BD%9C"><span class="toc-number">11.</span> <span class="toc-text">事务操作</span></a></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script></div></body></html>

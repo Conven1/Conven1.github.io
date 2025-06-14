@@ -1,0 +1,288 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>JVM-垃圾回收机制 | 射手座的程序员</title><meta name="keywords" content="JVM"><meta name="author" content="Kyle Song"><meta name="copyright" content="Kyle Song"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="垃圾标记阶段 引用计数算法   实现原理：在为一个对象添加引用时，引用计数 +1，为对象删除一个引用时引用计数 -1，当引用计数为 0 时，表示对象不被使用，可标记为垃圾对象。 缺点：无法处理循环引用的情况，当两个对象互相引用时引用计数一直为 1 无法被回收。   可达性分析算法   实现原理：定义一些GCRoots对象，以这些对象作为起点向下搜索，搜索所走过的路径称为引用链，如果在GCRoots">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM-垃圾回收机制">
+<meta property="og:url" content="https://conven1.github.io/jvm/JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/index.html">
+<meta property="og:site_name" content="射手座的程序员">
+<meta property="og:description" content="垃圾标记阶段 引用计数算法   实现原理：在为一个对象添加引用时，引用计数 +1，为对象删除一个引用时引用计数 -1，当引用计数为 0 时，表示对象不被使用，可标记为垃圾对象。 缺点：无法处理循环引用的情况，当两个对象互相引用时引用计数一直为 1 无法被回收。   可达性分析算法   实现原理：定义一些GCRoots对象，以这些对象作为起点向下搜索，搜索所走过的路径称为引用链，如果在GCRoots">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg">
+<meta property="article:published_time" content="2022-07-18T15:36:51.000Z">
+<meta property="article:modified_time" content="2024-09-15T04:01:47.067Z">
+<meta property="article:author" content="Kyle Song">
+<meta property="article:tag" content="JVM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://conven1.github.io/jvm/JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'JVM-垃圾回收机制',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-09-15 12:01:47'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/style.css"><meta name="generator" content="Hexo 6.2.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/./img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">射手座的程序员</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">JVM-垃圾回收机制</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2022-07-18T15:36:51.000Z" title="发表于 2022-07-18 23:36:51">2022-07-18</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Java/">Java</a></span></div><div class="meta-secondline"></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h3 id="垃圾标记阶段"><a href="#垃圾标记阶段" class="headerlink" title="垃圾标记阶段"></a>垃圾标记阶段</h3><ol>
+<li>引用计数算法</li>
+</ol>
+<ul>
+<li>实现原理：在为一个对象添加引用时，引用计数 +1，为对象删除一个引用时引用计数 -1，当引用计数为 0 时，表示对象不被使用，可标记为垃圾对象。</li>
+<li>缺点：无法处理循环引用的情况，当两个对象互相引用时引用计数一直为 1 无法被回收。</li>
+</ul>
+<ol start="2">
+<li>可达性分析算法</li>
+</ol>
+<ul>
+<li>实现原理：定义一些GCRoots对象，以这些对象作为起点向下搜索，搜索所走过的路径称为引用链，如果在GCRoots和一个对象之间没有任何引用链直接或间接相连，则称该对象不可达，可标记为垃圾对象。</li>
+<li>可作为GC Root的元素：<br>（1）虚拟机栈中引用的对象，例如：各个线程被调用的方法中使用到的参数、局部变量等。<br>（2）本地方法栈内JNI（通常说的本地方法）引用的对象。<br>（3）方法区中类静态属性引用的对象，例如：Java类的引用类型静态变量。<br>（4）方法区中常量引用的对象，例如：字符串常量池（String Table）里的引用。<br>（5）所有被同步锁synchronized持有的对象。<br>（6）Java虚拟机内部的引用。<br>（7）基本数据类型对应的Class对象，一些常驻的异常对象（例如：NullPointerException、OutOfMemoryError），系统类加载器。<br>（8）除了这些固定的GC Roots集合以外，根据用户所选用的垃圾收集器以及当前收集的内存区域不同，还可以有其他对象“临时性”地加入，共同构成完整GC Roots集合。例如：分代收集和局部收集（PartialGC）。</li>
+</ul>
+<h3 id="垃圾清除阶段"><a href="#垃圾清除阶段" class="headerlink" title="垃圾清除阶段"></a>垃圾清除阶段</h3><ol>
+<li>标记清除算法</li>
+</ol>
+<ul>
+<li>实现原理：收集器从GC Root开始遍历，标记所有被引用的可达对象，再对堆内存进行线性遍历，若某个对象未被标记为可达对象则进行垃圾回收。<em>垃圾回收并不是指对对象完全清除置空，而是把垃圾对象的内存地址记录在空闲地址中，下次有新对象加载时判断地址空间是否足够，若是足够则覆盖原有的地址存放</em>。</li>
+<li>缺点：<br>（1）需要进行两次遍历，即使时间复杂度为O(n)，但是加载的类比较多，GC时停止用户线程较久。<br>（2）清理出的内存不是连续的，会引起内存碎片化的问题，导致大对象没有连续的可用内存空间。</li>
+</ul>
+<ol start="2">
+<li>复制算法</li>
+</ol>
+<ul>
+<li>实现原理：将内存空间分成两块，每次只使用其中一块，垃圾回收时将存活对象复制到另一块内存空间，之后清除原先使用的内存块内的所有对象，弥补了标记清除法的两个弊端。</li>
+<li>缺点：可用内存缩小为了原来的一半，若存活对象较多，复制效率也会大大降低。</li>
+</ul>
+<ol start="3">
+<li>标记整理算法</li>
+</ol>
+<ul>
+<li>实现原理：标记阶段和标记清除法一致，遍历GC Root，标记存活对象，整理阶段移动所有存活对象，按照内存地址依次排序，将末端以后的内存地址全部回收。</li>
+<li>缺点：因为需要依次整理存活对象从而导致效率低，且在多线程情况下，当需要为一个新对象分配内存时，可能出现指针碰撞的情况。</li>
+</ul>
+<ol start="4">
+<li>分代收集算法</li>
+</ol>
+<ul>
+<li>实现原理：根据对象存活周期的不同将内存分为几块，根据每块内存呢不同的特点使用不同的回收算法以提高回收效率。<br>（1）新生代<br>新生代采用复制算法实现垃圾回收，新对象在Eden区创建（大对象直接进入老年代），当Eden区满时，就会触发一次Minor GC,将存活的对象复制到Form Survivor（S0）区，Eden区都是未被使用的空间，可供继续创建对象。<br>下一次触发Minor GC时，将Eden区的存活对象复制到TO Survivor（S1）区，S0区的存活对象会根据年龄判断去向，年龄大于15（ 参数-XX:MaxTenuringThreshold决定）的就会进入老年代，未达年龄的存活对象会被复制到S1区（若不能容纳，多余部分进入老年代），清除所有的Eden区和S0区，S0区和S1区身份互换（保证To Survivor为空），存活对象的年龄 +1。<br>（2）老年代<br>老年代采用标记清除算法和标记整理算法混合实现垃圾回收，大对象或长期存活对象会进入老年代，当老年代满时，会触发Full GC,Full GC会同时回收新生代、老年代（整堆回收），<em>CMS收集器当老年代满时会触发Major GC单独回收老年代</em>。</li>
+</ul>
+<h3 id="空间分配担保机制"><a href="#空间分配担保机制" class="headerlink" title="空间分配担保机制"></a>空间分配担保机制</h3><ul>
+<li>在发生Minor GC之前，虚拟机会检查老年代最大可用的连续空间是否大于新生代所有对象的总空间，如果大于，则此次Minor GC是安全的如果小于，则虚拟机会查看HandlePromotionFailure设置值是否允许担保失败。如果HandlePromotionFailure&#x3D;true，那么会继续检查老年代最大可用连续空间是否大于历次晋升到老年代的对象的平均大小，如果大于，则尝试进行一次Minor GC，但这次Minor GC依然是有风险的；如果小于或者HandlePromotionFailure&#x3D;false，则改为进行一次Full GC。</li>
+<li>进行空间担保的原因是因为新生代采用复制收集算法，假如大量对象在Minor GC后仍然存活（最极端情况为内存回收后新生代中所有对象均存活），而Survivor空间是比较小的，这时就需要老年代进行分配担保，把Survivor无法容纳的对象放到老年代。老年代要进行空间分配担保，前提是老年代得有足够空间来容纳这些对象，但一共有多少对象在内存回收后存活下来是不可预知的，因此只好取之前每次垃圾回收后晋升到老年代的对象大小的平均值作为参考。使用这个平均值与老年代剩余空间进行比较，来决定是否进行Full GC来让老年代腾出更多空间。</li>
+</ul>
+<h3 id="垃圾收集器"><a href="#垃圾收集器" class="headerlink" title="垃圾收集器"></a>垃圾收集器</h3><ul>
+<li>针对新生代提供的垃圾收集器有：Serial、ParNew、Parallel Scavenge<br>（1）Serial：基于复制算法的单线程收集器。<br>（2）ParNew：基于复制算法的多线程收集器。<br>（3）Parallel Scavenge：基于复制算法的多线程收集器，通过自适应调节策略提高了系统吞吐量（最大垃圾收集停顿时间、吞吐量大小、自适应调节策略是否开启）。</li>
+<li>针对老生代提供的垃圾收集器有：CMS、Serial Old、Parallel Old<br>（1）Serial Old：基于标记整理算法的单线程收集器。<br>（2）Parallel Old：基于标记清除算法的多线程收集器。<br>（3）CMS：基于标记清除算法的多线程收集器（初始标记-并发标记-重新标记-并发清除）。</li>
+</ul>
+<h3 id="finalization机制"><a href="#finalization机制" class="headerlink" title="finalization机制"></a>finalization机制</h3><p>Java语言提供了对象终止（finalization）机制来允许开发人员提供对象被销毁之前的自定义处理逻辑。<br>对象终止机制在Object类中定义finalize() ，同时默认是空。finalize() 方法允许在子类中被重写，用于在对象被收集时进行资源释放。通常在这个方法中进行一些资源释放和清理的工作，比如关闭文件、套接字和数据库连接等。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">finalize</span><span class="params">()</span> <span class="keyword">throws</span> Throwable &#123; &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>当标记阶段发现此对象是垃圾后，在清除之前，总会先调用这个对象的finalize()方法，由于该机制的存在，JVM中的对象分为以下三种状态：<br>（1）可达的：从GC Root开始，可以到达这个对象。<br>（2）可复活的：对象的所有引用都被释放，但是对象有可能在finalize()中复活。<br>（3）不可达的： 对象的finalize()被调用，并且没有复活，那么就会进入不可达状态。不可达的对象不可能被复活，因为finalize()只会被调用一次。</li>
+<li>具体过程：<br>（1）如果对象到GC Roots没有引用链，则进行第一次标记。<br>（2）进行筛选，判断此对象是否有必要执行finalize()方法。<br>如果对象没有重写finalize()方法，或者finalize()方法已经被虚拟机调用过，则虚拟机视为没有必要执行，对象被判定为不可达。<br>如果对象重写了finalize()方法且还未执行过，会被插入到F-Queue队列中，由虚拟机自动创建的、低优先级的Finalizer线程触发其finalize()方法执行。<br>finalize()方法是对象逃亡的最后机会，稍后GC会对F-Queue队列中的对象进行第二次标记。<br>如果对象在finalize()方法中与引用链上的任何一个对象建立联系，那么在第二次标记时该对象会被移除”即将回收”集合。<br>之后对象会再次出现没有引用存在的情况，在这个情况下，finalize()方法不会再次被调用，对象会直接变成不可达的状态。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Obj</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Obj obj;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">        obj = <span class="keyword">new</span> <span class="title class_">Obj</span>();</span><br><span class="line">        obj = <span class="literal">null</span>;</span><br><span class="line">        System.gc();</span><br><span class="line">        System.out.println(<span class="string">&quot;=======gc======&quot;</span>);</span><br><span class="line">        Thread.sleep(<span class="number">2000</span>);</span><br><span class="line">        <span class="keyword">if</span> (obj == <span class="literal">null</span>) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;dead&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;survive&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;======gc=======&quot;</span>);</span><br><span class="line">        obj = <span class="literal">null</span>;</span><br><span class="line">        System.gc();</span><br><span class="line">        Thread.sleep(<span class="number">2000</span>);</span><br><span class="line">        <span class="keyword">if</span> (obj == <span class="literal">null</span>) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;dead&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;survive&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">finalize</span><span class="params">()</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        <span class="built_in">super</span>.finalize();</span><br><span class="line">        System.out.println(<span class="string">&quot;重写了finalize()&quot;</span>);</span><br><span class="line">        obj = <span class="built_in">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/JVM/">JVM</a></div><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/jvm/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/"><img class="prev-cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">JVM-内存模型</div></div></a></div><div class="next-post pull-right"><a href="/java/collection/%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D/"><img class="next-cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Java中使用stream流进行数组去重</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/jvm/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" title="JVM-内存模型"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-19</div><div class="title">JVM-内存模型</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/./img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Kyle Song</div><div class="author-info__description">Forge ahead like a gigantic ship breaking through strong winds and heavy waves</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Conven1"><i class="fab fa-github"></i><span>关注我</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Conven1" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:kerideth@163.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9E%83%E5%9C%BE%E6%A0%87%E8%AE%B0%E9%98%B6%E6%AE%B5"><span class="toc-number">1.</span> <span class="toc-text">垃圾标记阶段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9E%83%E5%9C%BE%E6%B8%85%E9%99%A4%E9%98%B6%E6%AE%B5"><span class="toc-number">2.</span> <span class="toc-text">垃圾清除阶段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A9%BA%E9%97%B4%E5%88%86%E9%85%8D%E6%8B%85%E4%BF%9D%E6%9C%BA%E5%88%B6"><span class="toc-number">3.</span> <span class="toc-text">空间分配担保机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8"><span class="toc-number">4.</span> <span class="toc-text">垃圾收集器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#finalization%E6%9C%BA%E5%88%B6"><span class="toc-number">5.</span> <span class="toc-text">finalization机制</span></a></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script></div></body></html>

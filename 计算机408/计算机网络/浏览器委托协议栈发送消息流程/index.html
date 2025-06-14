@@ -1,0 +1,306 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>浏览器委托协议栈发送消息流程 | 射手座的程序员</title><meta name="keywords" content="射手座的程序员"><meta name="author" content="Kyle Song"><meta name="copyright" content="Kyle Song"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="协议栈发送消息基本流程 创建套接字 将管道连接到服务端的套接字上 收发数据 断开管道并删除套接字  创建套接字协议栈的内部结构  协议栈的上半部分有两块，分别是负责用 TCP 协议收发数据的部分和负责用 UDP 协议收发数据的部分，它们会接受应用程序的委托执行收发数据的操作。 浏览器、邮件等一般应用程序收发数据时用 TCP DNS 查询等收发较短的控制数据时用UDP   下面一半是用 IP 协议控">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浏览器委托协议栈发送消息流程">
+<meta property="og:url" content="https://conven1.github.io/%E8%AE%A1%E7%AE%97%E6%9C%BA408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%A7%94%E6%89%98%E5%8D%8F%E8%AE%AE%E6%A0%88%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF%E6%B5%81%E7%A8%8B/index.html">
+<meta property="og:site_name" content="射手座的程序员">
+<meta property="og:description" content="协议栈发送消息基本流程 创建套接字 将管道连接到服务端的套接字上 收发数据 断开管道并删除套接字  创建套接字协议栈的内部结构  协议栈的上半部分有两块，分别是负责用 TCP 协议收发数据的部分和负责用 UDP 协议收发数据的部分，它们会接受应用程序的委托执行收发数据的操作。 浏览器、邮件等一般应用程序收发数据时用 TCP DNS 查询等收发较短的控制数据时用UDP   下面一半是用 IP 协议控">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg">
+<meta property="article:published_time" content="2022-12-02T05:36:51.000Z">
+<meta property="article:modified_time" content="2024-09-15T04:01:47.074Z">
+<meta property="article:author" content="Kyle Song">
+<meta property="article:tag" content="射手座的程序员">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://conven1.github.io/%E8%AE%A1%E7%AE%97%E6%9C%BA408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%A7%94%E6%89%98%E5%8D%8F%E8%AE%AE%E6%A0%88%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF%E6%B5%81%E7%A8%8B/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '浏览器委托协议栈发送消息流程',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-09-15 12:01:47'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/style.css"><meta name="generator" content="Hexo 6.2.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/./img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">射手座的程序员</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">浏览器委托协议栈发送消息流程</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2022-12-02T05:36:51.000Z" title="发表于 2022-12-02 13:36:51">2022-12-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></span></div><div class="meta-secondline"></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="协议栈发送消息基本流程"><a href="#协议栈发送消息基本流程" class="headerlink" title="协议栈发送消息基本流程"></a>协议栈发送消息基本流程</h2><ol>
+<li>创建套接字</li>
+<li>将管道连接到服务端的套接字上</li>
+<li>收发数据</li>
+<li>断开管道并删除套接字<br><img src="https://cdn.jsdelivr.net/gh/Conven1/picode/img/1669883880192.png" alt="协议栈发送消息基本流程"></li>
+</ol>
+<h2 id="创建套接字"><a href="#创建套接字" class="headerlink" title="创建套接字"></a>创建套接字</h2><h3 id="协议栈的内部结构"><a href="#协议栈的内部结构" class="headerlink" title="协议栈的内部结构"></a>协议栈的内部结构</h3><p><img src="https://cdn.jsdelivr.net/gh/Conven1/picode/img/20221201161742.png" alt="TCP/IP软件的分成结构"></p>
+<ul>
+<li>协议栈的上半部分有两块，分别是负责用 TCP 协议收发数据的部分和负责用 UDP 协议收发数据的部分，它们会接受应用程序的委托执行收发数据的操作。<ol>
+<li>浏览器、邮件等一般应用程序收发数据时用 TCP</li>
+<li>DNS 查询等收发较短的控制数据时用UDP</li>
+</ol>
+</li>
+<li>下面一半是用 IP 协议控制网络包收发操作的部分。在互联网上传送数据时，数据会被切分成一个一个的网络包，而将网络包发送给通信对象的操作就是由 IP 来负责的。此外，IP 中还包括 ICMP 协议和 ARP 协议。 ICMP 用于告知网络包传送过程中产生的错误以及各种控制消息，ARP 用于根据 IP 地址查询相应的以太网 MAC 地址。</li>
+</ul>
+<h3 id="套接字的实体就是通信控制信息"><a href="#套接字的实体就是通信控制信息" class="headerlink" title="套接字的实体就是通信控制信息"></a>套接字的实体就是通信控制信息</h3><ul>
+<li>协议栈内部有一块用于存放控制信息的内存空间，这里记录了用于控制通信操作的控制信息，例如通信对象的 IP 地址、端口号、通信操作的进行状态等,可以说这些控制信息就是套接字的实体。<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -ano // 显示套接字内容，具体内容代表的意义不做阐述</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="创建套接字过程"><a href="#创建套接字过程" class="headerlink" title="创建套接字过程"></a>创建套接字过程</h3><ul>
+<li>创建套接字时，首先分配一个套接字所需的内存空间，然后向其中写入初始状态。将表示这个套接字的描述符告知应用程序。</li>
+<li>收到描述符之后，应用程序在向协议栈进行收发数据委托时就需要提供这个描述符，协议栈就能得知应该和谁进行通信了。</li>
+</ul>
+<h2 id="将管道连接到服务器端的套接字上"><a href="#将管道连接到服务器端的套接字上" class="headerlink" title="将管道连接到服务器端的套接字上"></a>将管道连接到服务器端的套接字上</h2><h3 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h3><ol>
+<li>套接字创建完成后，协议栈不知道通信的对象是谁，也不知道数据应该发送给谁，我们需要把服务器的 IP 地址和端口号等信息告知协议栈。</li>
+<li>客户端需要向服务器传达开始通信的请求</li>
+<li>为数据收发做准备</li>
+</ol>
+<h3 id="通信操作中的两种控制信息"><a href="#通信操作中的两种控制信息" class="headerlink" title="通信操作中的两种控制信息"></a>通信操作中的两种控制信息</h3><ol>
+<li>头部中记录的信息，例如TCP头部、以太网头部、IP头部…</li>
+<li>套接字（协议栈中的内存空间）中记录的信息,用来控制协议栈操作的信息</li>
+</ol>
+<h3 id="连接过程"><a href="#连接过程" class="headerlink" title="连接过程"></a>连接过程</h3><ol>
+<li>客户端先创建一个包含表示开始数据收发操作的控制信息的头部</li>
+<li>将头部中的控制位的 SYN 比特设置为 1，设置适当的序号和窗口大小</li>
+<li>TCP 模块将信息传递给 IP 模块并委托它进行发送</li>
+<li>IP 模块会将接收到的数据传递给服务器的 TCP 模块，TCP 模块可以根据 TCP 头部中的信息找到端口号对应的套接字，并将状态改为正在连接</li>
+<li>服务器的 TCP 模块会返回响应，在 TCP 头部中设置发送方和接收方端口号以及 SYN 比特，并将 ACK 控制位设为 1</li>
+<li>服务器 TCP 模块会将 TCP 头部传递给 IP 模块，并委托 IP 模块向客户端返回响应</li>
+<li>IP 模块会将接收到的数据传递给客户端的 TCP 模块，TCP 模块可以根据 TCP 头部中的信息确认连接服务器的操作是否成功，SYN 为 1 则表示连接成功，这时会向套接字中写入服务器的 IP 地址、端口号等信息，同时还会将状态改为连接完毕</li>
+<li>客户端将 ACK 控制位设置为 1 并发回服务器，告诉服务器刚才的响应包已经收到</li>
+</ol>
+<h2 id="收发数据"><a href="#收发数据" class="headerlink" title="收发数据"></a>收发数据</h2><h3 id="将HTTP请求消息交给协议栈"><a href="#将HTTP请求消息交给协议栈" class="headerlink" title="将HTTP请求消息交给协议栈"></a>将HTTP请求消息交给协议栈</h3><ul>
+<li>协议栈不关心数据内容，收到数据后会先将数据放在发送缓冲区中，等待应用程序下一段数据，防止发送大量小包降低网络效率，判断要素主要根据MTU参数以及应用程序发送数据频率</li>
+</ul>
+<h3 id="对较大数据进行拆分"><a href="#对较大数据进行拆分" class="headerlink" title="对较大数据进行拆分"></a>对较大数据进行拆分</h3><ul>
+<li>当HTTP请求消息过长时，数据会被以MSS长度为单位进行拆分，在发送数据时在每一块拆分的数据前加上TCP头部</li>
+</ul>
+<h3 id="使用ACK号确认网络包已收到"><a href="#使用ACK号确认网络包已收到" class="headerlink" title="使用ACK号确认网络包已收到"></a>使用ACK号确认网络包已收到</h3><ul>
+<li>在发送网络包后需要进行确认操作，拆分数据时会记录数据为头部开始的第几个字节，同样地接受数据也会判断是接收数据的第几个字节，检测是否有遗漏，将接收到的数据长度写入TCP头部中的ACK号，并将ACK控制位设为1，通过“序号”和“ACK 号”可以确认接收方是否收到了网络包，服务端传给客户端原理相同</li>
+<li>实际操作流程<br><img src="https://cdn.jsdelivr.net/gh/Conven1/picode/img/1669946813514.png" alt="序号与ACK号的交互"></li>
+</ul>
+<ol>
+<li>客户端在连接时需要计算出与从客户端到服务器方向通信相关的序号初始值，并将这个值发送给服务器</li>
+<li>服务器通过这个初始值计算出 ACK 号并返回给客户端，服务器也需要计算出与从服务器到客户端方向通信相关的序号初始值，并将这个值发送给客户端</li>
+<li>客户端也需要根据服务器发来的初始值计算出 ACK 号并返回给服务器</li>
+<li>进入数据收发阶段，序号会跟随数据一起发送，服务器收到数据后再返回 ACK 号，反之亦然</li>
+</ol>
+<h3 id="根据网络包平均往返时间调整ACK号等待时间"><a href="#根据网络包平均往返时间调整ACK号等待时间" class="headerlink" title="根据网络包平均往返时间调整ACK号等待时间"></a>根据网络包平均往返时间调整ACK号等待时间</h3><h3 id="使用窗口有效管理ACK号"><a href="#使用窗口有效管理ACK号" class="headerlink" title="使用窗口有效管理ACK号"></a>使用窗口有效管理ACK号</h3><ul>
+<li>使用滑动窗口的方式发送数据，不等待ACK号的返回直接发送后续包，接收方将数据暂存在接收缓冲区，接收数据完成后会将缓冲区的数据释放并通过头部的窗口字段告知发送方能继续接收的数据量</li>
+<li>接收方在发送ACK号与窗口时会等待一段时间，将需要返回的数据合并为一个包，仅告知最后的ACK号与最后的窗口更新即可</li>
+</ul>
+<h3 id="接收HTTP响应消息"><a href="#接收HTTP响应消息" class="headerlink" title="接收HTTP响应消息"></a>接收HTTP响应消息</h3><ul>
+<li>协议栈会检查收到的数据块和TCP头部内容，数据未发生异常返回ACK号，协议栈将数据暂存于接收缓冲区，将数据块还原成原始数据复制到应用程序指定的内存地址中，将控制流程交回给应用程序</li>
+</ul>
+<h2 id="断开管道并删除套接字"><a href="#断开管道并删除套接字" class="headerlink" title="断开管道并删除套接字"></a>断开管道并删除套接字</h2><ul>
+<li>在数据收发操作完成后，客户端与服务端都可以发起断开过程，以客户端断开为例：</li>
+</ul>
+<ol>
+<li>客户端发送 FIN</li>
+<li>服务器返回 ACK 号</li>
+<li>服务器发送 FIN</li>
+<li>客户端返回 ACK 号</li>
+</ol>
+</article><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/%E8%AE%A1%E7%AE%97%E6%9C%BA408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E6%98%AF%E6%80%8E%E6%A0%B7%E8%BF%9E%E6%8E%A5%E7%9A%84/"><img class="prev-cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">网络是怎样连接的读书笔记</div></div></a></div><div class="next-post pull-right"><a href="/%E8%AE%A1%E7%AE%97%E6%9C%BA408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E5%9F%BA%E6%9C%AC%E5%AE%9A%E4%B9%89/"><img class="next-cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">计算机网络的名词定义</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/./img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Kyle Song</div><div class="author-info__description">Forge ahead like a gigantic ship breaking through strong winds and heavy waves</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Conven1"><i class="fab fa-github"></i><span>关注我</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Conven1" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:kerideth@163.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%8F%E8%AE%AE%E6%A0%88%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF%E5%9F%BA%E6%9C%AC%E6%B5%81%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">协议栈发送消息基本流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%A5%97%E6%8E%A5%E5%AD%97"><span class="toc-number">2.</span> <span class="toc-text">创建套接字</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%8F%E8%AE%AE%E6%A0%88%E7%9A%84%E5%86%85%E9%83%A8%E7%BB%93%E6%9E%84"><span class="toc-number">2.1.</span> <span class="toc-text">协议栈的内部结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A5%97%E6%8E%A5%E5%AD%97%E7%9A%84%E5%AE%9E%E4%BD%93%E5%B0%B1%E6%98%AF%E9%80%9A%E4%BF%A1%E6%8E%A7%E5%88%B6%E4%BF%A1%E6%81%AF"><span class="toc-number">2.2.</span> <span class="toc-text">套接字的实体就是通信控制信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%A5%97%E6%8E%A5%E5%AD%97%E8%BF%87%E7%A8%8B"><span class="toc-number">2.3.</span> <span class="toc-text">创建套接字过程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%86%E7%AE%A1%E9%81%93%E8%BF%9E%E6%8E%A5%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF%E7%9A%84%E5%A5%97%E6%8E%A5%E5%AD%97%E4%B8%8A"><span class="toc-number">3.</span> <span class="toc-text">将管道连接到服务器端的套接字上</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E7%9A%84"><span class="toc-number">3.1.</span> <span class="toc-text">目的</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E4%BF%A1%E6%93%8D%E4%BD%9C%E4%B8%AD%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%8E%A7%E5%88%B6%E4%BF%A1%E6%81%AF"><span class="toc-number">3.2.</span> <span class="toc-text">通信操作中的两种控制信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E8%BF%87%E7%A8%8B"><span class="toc-number">3.3.</span> <span class="toc-text">连接过程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%B6%E5%8F%91%E6%95%B0%E6%8D%AE"><span class="toc-number">4.</span> <span class="toc-text">收发数据</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%86HTTP%E8%AF%B7%E6%B1%82%E6%B6%88%E6%81%AF%E4%BA%A4%E7%BB%99%E5%8D%8F%E8%AE%AE%E6%A0%88"><span class="toc-number">4.1.</span> <span class="toc-text">将HTTP请求消息交给协议栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E8%BE%83%E5%A4%A7%E6%95%B0%E6%8D%AE%E8%BF%9B%E8%A1%8C%E6%8B%86%E5%88%86"><span class="toc-number">4.2.</span> <span class="toc-text">对较大数据进行拆分</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8ACK%E5%8F%B7%E7%A1%AE%E8%AE%A4%E7%BD%91%E7%BB%9C%E5%8C%85%E5%B7%B2%E6%94%B6%E5%88%B0"><span class="toc-number">4.3.</span> <span class="toc-text">使用ACK号确认网络包已收到</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B9%E6%8D%AE%E7%BD%91%E7%BB%9C%E5%8C%85%E5%B9%B3%E5%9D%87%E5%BE%80%E8%BF%94%E6%97%B6%E9%97%B4%E8%B0%83%E6%95%B4ACK%E5%8F%B7%E7%AD%89%E5%BE%85%E6%97%B6%E9%97%B4"><span class="toc-number">4.4.</span> <span class="toc-text">根据网络包平均往返时间调整ACK号等待时间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E7%AA%97%E5%8F%A3%E6%9C%89%E6%95%88%E7%AE%A1%E7%90%86ACK%E5%8F%B7"><span class="toc-number">4.5.</span> <span class="toc-text">使用窗口有效管理ACK号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A5%E6%94%B6HTTP%E5%93%8D%E5%BA%94%E6%B6%88%E6%81%AF"><span class="toc-number">4.6.</span> <span class="toc-text">接收HTTP响应消息</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%AD%E5%BC%80%E7%AE%A1%E9%81%93%E5%B9%B6%E5%88%A0%E9%99%A4%E5%A5%97%E6%8E%A5%E5%AD%97"><span class="toc-number">5.</span> <span class="toc-text">断开管道并删除套接字</span></a></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script></div></body></html>

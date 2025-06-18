@@ -1,7 +1,10 @@
+https://conven1.github.io/project/BudgetTracker%20&%20Asset/
+https://conven1.github.io/kafka/4.%20kafka%E7%94%9F%E4%BA%A7%E6%95%B0%E6%8D%AE/
 https://conven1.github.io/Curriculum%20vitae/Project%20analysis/
+https://conven1.github.io/Curriculum%20vitae/%E9%9D%A2%E7%BB%8F/614%E4%B8%8A%E5%8D%88%E8%BD%AF%E9%80%9A%E5%8A%A8%E5%8A%9B%E4%B8%80%E9%9D%A2/
+https://conven1.github.io/java/Notification/SendEmail/
 https://conven1.github.io/java/io/%E8%A7%A3%E6%9E%90Txt%E7%9A%84json/
 https://conven1.github.io/java/Notification/ReadEmail/
-https://conven1.github.io/java/Notification/SendEmail/
 https://conven1.github.io/java/SpringBoot3.0/%E7%89%88%E6%9C%AC%E5%8D%87%E7%BA%A7/
 https://conven1.github.io/Curriculum%20vitae/%E6%8A%80%E8%83%BD/
 https://conven1.github.io/kafka/8.%20kafka%E9%9D%A2%E8%AF%95%E6%B1%87%E6%80%BB/
@@ -11,7 +14,6 @@ https://conven1.github.io/kafka/5.%20kafka%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE/
 https://conven1.github.io/kafka/6.%20kafka%E6%B6%88%E8%B4%B9%E6%95%B0%E6%8D%AE/
 https://conven1.github.io/kafka/2.%20kafka%E6%9C%8D%E5%8A%A1%E5%90%AF%E5%8A%A8/
 https://conven1.github.io/kafka/3.%20kafka%E4%B8%BB%E9%A2%98%E5%88%9B%E5%BB%BA/
-https://conven1.github.io/kafka/4.%20kafka%E7%94%9F%E4%BA%A7%E6%95%B0%E6%8D%AE/
 https://conven1.github.io/redis/3.%20Redis%E9%AB%98%E5%8F%AF%E7%94%A8/
 https://conven1.github.io/redis/5.%20Redis%E7%9A%84%E8%BF%87%E6%9C%9F%E7%AD%96%E7%95%A5%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E6%B7%98%E6%B1%B0%E6%9C%BA%E5%88%B6/
 https://conven1.github.io/redis/4.%20%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F%E3%80%81%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E3%80%81%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9/
@@ -74,6 +76,8 @@ https://conven1.github.io/tags/Curriculum-vitae/
 https://conven1.github.io/tags/SpringBoot/
 https://conven1.github.io/tags/Email/
 https://conven1.github.io/tags/Java-IO/
+https://conven1.github.io/tags/%E9%9D%A2%E7%BB%8F/
+https://conven1.github.io/tags/Project/
 https://conven1.github.io/categories/blog/
 https://conven1.github.io/categories/MySql/
 https://conven1.github.io/categories/js/
@@ -87,3 +91,5 @@ https://conven1.github.io/categories/Curriculum-vitae/
 https://conven1.github.io/categories/SpringBoot/
 https://conven1.github.io/categories/Email/
 https://conven1.github.io/categories/Java-IO/
+https://conven1.github.io/categories/%E9%9D%A2%E7%BB%8F/
+https://conven1.github.io/categories/Project/

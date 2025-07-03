@@ -1,0 +1,353 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>6.14软通动力一面 | 射手座的程序员</title><meta name="keywords" content="面经"><meta name="author" content="Kyle Song"><meta name="copyright" content="Kyle Song"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="自我介绍  重写和重载定义和区别    重写：子类重新定义父类的方法，特点是：方法名、参数、返回类型完全相同；访问修饰符不能比父类严格；只能重写非静态方法，可以用@override表明这是重写方法。 重载：同一类中方法名相同但参数不同的方法，特点是：方法名完全相同，参数列表必须不同，返回类型和访问修饰符可以不同。   集合排序的方式有哪些？   使用Collections工具类排序：Collec">
+<meta property="og:type" content="article">
+<meta property="og:title" content="6.14软通动力一面">
+<meta property="og:url" content="https://conven1.github.io/Curriculum%20vitae/%E9%9D%A2%E7%BB%8F/614%E4%B8%AD%E8%BD%AF%E5%9B%BD%E9%99%85%E4%B8%80%E9%9D%A2/index.html">
+<meta property="og:site_name" content="射手座的程序员">
+<meta property="og:description" content="自我介绍  重写和重载定义和区别    重写：子类重新定义父类的方法，特点是：方法名、参数、返回类型完全相同；访问修饰符不能比父类严格；只能重写非静态方法，可以用@override表明这是重写方法。 重载：同一类中方法名相同但参数不同的方法，特点是：方法名完全相同，参数列表必须不同，返回类型和访问修饰符可以不同。   集合排序的方式有哪些？   使用Collections工具类排序：Collec">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg">
+<meta property="article:published_time" content="2025-06-14T05:36:51.000Z">
+<meta property="article:modified_time" content="2025-06-28T04:51:08.704Z">
+<meta property="article:author" content="Kyle Song">
+<meta property="article:tag" content="面经">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://conven1.github.io/Curriculum%20vitae/%E9%9D%A2%E7%BB%8F/614%E4%B8%AD%E8%BD%AF%E5%9B%BD%E9%99%85%E4%B8%80%E9%9D%A2/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '6.14软通动力一面',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2025-06-28 12:51:08'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/style.css"><meta name="generator" content="Hexo 6.2.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/./img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">55</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">16</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">射手座的程序员</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">6.14软通动力一面</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2025-06-14T05:36:51.000Z" title="发表于 2025-06-14 13:36:51">2025-06-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%9D%A2%E7%BB%8F/">面经</a></span></div><div class="meta-secondline"></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><ol>
+<li><p>自我介绍</p>
+</li>
+<li><p>重写和重载定义和区别</p>
+</li>
+</ol>
+<ul>
+<li>重写：子类重新定义父类的方法，特点是：方法名、参数、返回类型完全相同；访问修饰符不能比父类严格；只能重写非静态方法，可以用<code>@override</code>表明这是重写方法。</li>
+<li>重载：同一类中方法名相同但参数不同的方法，特点是：方法名完全相同，参数列表必须不同，返回类型和访问修饰符可以不同。</li>
+</ul>
+<ol start="3">
+<li>集合排序的方式有哪些？</li>
+</ol>
+<ul>
+<li>使用Collections工具类排序：<code>Collections.sort</code></li>
+<li>使用List接口的sort方法：<code>list.sort()</code></li>
+<li>Stream API排序：<code>list.stream().sorted().collect(Collectors.toList())</code></li>
+<li>实现Comparable接口：继承Comparable接口重写compareTo方法</li>
+<li>使用Comparator比较器：创建比较器<code>Comparator&lt;Person&gt; ageComparator = (a, b) -&gt; a.getAge() - b.getAge()</code></li>
+<li>大数据集考虑使用并行流排序：<code>parallelStream</code></li>
+</ul>
+<ol start="4">
+<li>Java8有哪些新特性？</li>
+</ol>
+<ul>
+<li>Lambda表达式：简化匿名内部类的写法</li>
+<li>函数式接口：只有一个抽象方法的接口，可以使用<code>@FunctionalInterface</code>注解标记；<br>四大核心函数式接口：<br><code>Consumer&lt;T&gt;</code>：消费型，void accept(T t)<br><code>Supplier&lt;T&gt;</code>：供给型，T get()<br><code>Function&lt;T,R&gt;</code>：函数型，R apply(T t)<br><code>Predicate&lt;T&gt;</code>：断言型，boolean test(T t)  </li>
+<li>方法引用：用于直接引用已有方法<br>四种形式：<br>静态方法引用：ClassName::staticMethod<br>实例方法引用：instance::method<br>特定类型的任意对象方法引用：ClassName::method<br>构造器引用：ClassName::new  </li>
+<li>Stream API：用于处理集合数据的函数式操作，特点是不存储数据、不改变源数据、延迟执行</li>
+<li>默认方法：允许接口包含具有实现的方法，使用<code>default</code>关键字修饰</li>
+<li>Optional类：用于解决NullPointerException问题，容器类，可能包含或不包含非空值</li>
+<li>新的日期时间API：<code>LocalDate</code>，<code>LocalTime</code>，<code>LocalDateTime</code>等</li>
+<li>并行数组操作：并行排序：<code>Arrays.parallelSort()</code>、并行设置所有元素：<code>Arrays.parallelSetAll()</code>，并行累积操作：<code>Arrays.parallelPrefix()</code></li>
+</ul>
+<ol start="5">
+<li>函数式接口的应用？</li>
+</ol>
+<ul>
+<li>Stream API：<code>filter</code>，<code>map</code>，<code>foreach</code></li>
+<li>Optional操作的值处理：<code>ifPresent</code>，<code>orElseGet</code></li>
+<li>比较器构造</li>
+<li>多线程编程：<code>Runnable</code>接口：替代匿名内部类，<code>Callable</code>接口：带返回值的任务</li>
+<li>模板方法设计：自定义业务逻辑封装，例如：数据导出、消息通知等</li>
+</ul>
+<ol start="6">
+<li>线程池的参数有哪些？</li>
+</ol>
+<ul>
+<li><code>corePoolSize</code> (核心线程数)：线程池中保持的最小线程数量</li>
+<li><code>maximumPoolSize</code> (最大线程数)：线程池允许创建的最大线程数量</li>
+<li><code>keepAliveTime</code> (线程空闲时间)：非核心线程空闲时的存活时间</li>
+<li><code>unit</code> (时间单位)：keepAliveTime的时间单位</li>
+<li><code>workQueue</code> (工作队列)：用于保存等待执行的任务的阻塞队列<br><code>ArrayBlockingQueue</code>：有界队列<br><code>LinkedBlockingQueue</code>：无界队列(默认Integer.MAX_VALUE)<br><code>SynchronousQueue</code>：不存储元素的队列<br><code>PriorityBlockingQueue</code>：带优先级的队列  </li>
+<li><code>threadFactory</code> (线程工厂)：用于创建新线程</li>
+<li><code>handler</code> (拒绝策略)：当线程池和队列都饱和时的处理策略<br><code>AbortPolicy</code>(默认)：抛出RejectedExecutionException<br><code>CallerRunsPolicy</code>：由提交任务的线程直接执行<br><code>DiscardPolicy</code>：静默丢弃任务<br><code>DiscardOldestPolicy</code>：丢弃队列中最旧的任务并重试</li>
+</ul>
+<ol start="7">
+<li>线程的生命周期有哪些？</li>
+</ol>
+<ul>
+<li>新建：<code>new Thread()</code></li>
+<li>运行: <code>start()</code></li>
+<li>阻塞等待：线程被阻塞，分为无限期等待，限期等待<code>wait()</code>，<code>join()</code>，<code>sleep()</code></li>
+<li>终止：<code>run()</code>或<code>main()</code>正常结束，未捕获的异常导致线程终止</li>
+</ul>
+<ol start="8">
+<li><p>spring aop是什么？应用场景有哪些？<br>面向切面编程，对面向对象的一种补充，抽取与业务无关封装可重用的模块作为切面，在特定的切点做增强处理。<br>动态代理的两种方式：<br>jdk动态代理：只能代理接口方法，核心是<code>InvocationHandle</code>接口和<code>Proxy</code>类<br>cglib动态代理：不能代理final方法&#x2F;类(继承的方式实现)<br>可应用五种类型的通知：前置通知、后置通知、返回通知、异常通知、环绕通知<br>使用场景：日志处理、异常处理、权限控制、缓存处理、数据校验  </p>
+</li>
+<li><p>如何处理前后端校验一致性？校验过哪些东西？如何用注解的方式校验？举一个例子<br>使用相同的校验规则；一般校验：必填、长度、格式、范围、业务校验；<br>Spring Boot内置支持通过validation注解进行校验：<code>@NotNull</code>、<code>@NotBank</code>、<code>@NotEmpty</code>、<code>@Email</code>等<br>自定义注解校验：定义一个注解，用<code>@Constraint</code>标记校验器；实现校验器，实现<code>ConstraintValidator</code>接口，重写<code>isValid</code>方法；在对象属性上使用；<br>以下拉框校验为例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义一个枚举</span></span><br><span class="line"><span class="comment">// 性别选项枚举示例</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> <span class="title class_">Gender</span> &#123;</span><br><span class="line">    MALE(<span class="string">&quot;1&quot;</span>, <span class="string">&quot;男&quot;</span>),</span><br><span class="line">    FEMALE(<span class="string">&quot;2&quot;</span>, <span class="string">&quot;女&quot;</span>),</span><br><span class="line">    UNKNOWN(<span class="string">&quot;3&quot;</span>, <span class="string">&quot;未知&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String value;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String label;</span><br><span class="line"></span><br><span class="line">    Gender(String value, String label) &#123;</span><br><span class="line">        <span class="built_in">this</span>.value = value;</span><br><span class="line">        <span class="built_in">this</span>.label = label;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getValue</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取所有合法值</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> List&lt;String&gt; <span class="title function_">validValues</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> Arrays.stream(values())</span><br><span class="line">                   .map(Gender::getValue)</span><br><span class="line">                   .collect(Collectors.toList());</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 检查值是否有效</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">boolean</span> <span class="title function_">isValid</span><span class="params">(String value)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> validValues().contains(value);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 创建自定义校验注解</span></span><br><span class="line"><span class="meta">@Target(&#123;ElementType.FIELD, ElementType.PARAMETER&#125;)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Constraint(validatedBy = DropdownValidator.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> ValidDropdown &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 默认错误消息</span></span><br><span class="line">    String <span class="title function_">message</span><span class="params">()</span> <span class="keyword">default</span> <span class="string">&quot;无效的下拉框选项&quot;</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 指定要校验的枚举类</span></span><br><span class="line">    Class&lt;? <span class="keyword">extends</span> <span class="title class_">Enum</span>&lt;?&gt;&gt; enumClass();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 获取值的方法名（默认为getValue）</span></span><br><span class="line">    String <span class="title function_">valueMethod</span><span class="params">()</span> <span class="keyword">default</span> <span class="string">&quot;getValue&quot;</span>;</span><br><span class="line">    </span><br><span class="line">    Class&lt;?&gt;[] groups() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line">    </span><br><span class="line">    Class&lt;? <span class="keyword">extends</span> <span class="title class_">Payload</span>&gt;[] payload() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 实现校验器逻辑</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DropdownValidator</span> <span class="keyword">implements</span> <span class="title class_">ConstraintValidator</span>&lt;ValidDropdown, String&gt; &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> List&lt;String&gt; validValues;</span><br><span class="line">    <span class="keyword">private</span> String enumName;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">initialize</span><span class="params">(ValidDropdown constraintAnnotation)</span> &#123;</span><br><span class="line">        <span class="comment">// 获取枚举类</span></span><br><span class="line">        Class&lt;? <span class="keyword">extends</span> <span class="title class_">Enum</span>&lt;?&gt;&gt; enumClass = constraintAnnotation.enumClass();</span><br><span class="line">        <span class="built_in">this</span>.enumName = enumClass.getSimpleName();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 通过反射获取合法值</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">String</span> <span class="variable">methodName</span> <span class="operator">=</span> constraintAnnotation.valueMethod();</span><br><span class="line">            <span class="type">Method</span> <span class="variable">valueMethod</span> <span class="operator">=</span> enumClass.getMethod(methodName);</span><br><span class="line">            </span><br><span class="line">            Enum&lt;?&gt;[] enumConstants = enumClass.getEnumConstants();</span><br><span class="line">            <span class="built_in">this</span>.validValues = Arrays.stream(enumConstants)</span><br><span class="line">                                    .map(e -&gt; &#123;</span><br><span class="line">                                        <span class="keyword">try</span> &#123;</span><br><span class="line">                                            <span class="keyword">return</span> (String) valueMethod.invoke(e);</span><br><span class="line">                                        &#125; <span class="keyword">catch</span> (Exception ex) &#123;</span><br><span class="line">                                            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(ex);</span><br><span class="line">                                        &#125;</span><br><span class="line">                                    &#125;)</span><br><span class="line">                                    .collect(Collectors.toList());</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;初始化下拉框校验器失败&quot;</span>, e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isValid</span><span class="params">(String value, ConstraintValidatorContext context)</span> &#123;</span><br><span class="line">        <span class="comment">// 允许空值（结合@NotNull等注解使用）</span></span><br><span class="line">        <span class="keyword">if</span> (value == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 检查值是否在合法范围内</span></span><br><span class="line">        <span class="type">boolean</span> <span class="variable">isValid</span> <span class="operator">=</span> validValues.contains(value);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!isValid) &#123;</span><br><span class="line">            <span class="comment">// 自定义错误消息</span></span><br><span class="line">            context.disableDefaultConstraintViolation();</span><br><span class="line">            context.buildConstraintViolationWithTemplate(</span><br><span class="line">                    String.format(<span class="string">&quot;&#x27;%s&#x27;不是有效的%s选项，合法值为: %s&quot;</span>, </span><br><span class="line">                                value, enumName, validValues))</span><br><span class="line">                   .addConstraintViolation();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> isValid;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 在DTO中使用校验注解</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserDTO</span> &#123;</span><br><span class="line">    <span class="meta">@NotBlank(message = &quot;性别不能为空&quot;)</span></span><br><span class="line">    <span class="meta">@ValidDropdown(enumClass = Gender.class, message = &quot;请选择有效的性别&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String gender;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>spring boot有哪些常用注解？<br>@SpringBootApplication、@Bean、@Component、@Configuration、@RestController、@Service、@Repository、@RequestMapping、@RequestBody、@Autowired、@Resource、@Value、@Table、@Transactional、@Aspect</p>
+</li>
+<li><p>避免循环引入的方式有哪些？</p>
+</li>
+</ol>
+<ul>
+<li>重构代码结构</li>
+<li>技术解决方案<br>Setter&#x2F;Field注入替代构造器注入<br>使用@Lazy延迟加载<br>ApplicationContext主动获取<br>使用@DependsOn控制初始化顺序  </li>
+<li>架构级解决方案<br>事件驱动架构：使用ApplicationEvent发布&#x2F;订阅机制<br>服务定位器模式：将需要引用的依赖放到一个map里</li>
+</ul>
+<ol start="12">
+<li>redis的作用？</li>
+</ol>
+<ul>
+<li>特点<br>高性能缓存<br>丰富的数据类型：String、Hash、List、Set、Sorted Set、Bitmaps、HyperLog、Geospatial、Stream<br>分布式系统支持<br>持久化功能：RDB(定时快照)&#x2F;AOF(记录所有写操作)  </li>
+<li>应用场景：会话缓存、计数器、消息队列、实时分析、地理位置、限流控制、布隆过滤器、二级索引</li>
+</ul>
+<ol start="13">
+<li><p>缓存穿透、缓存击穿、缓存雪崩？<br>缓存穿透：缓存和数据库中都没有的数据，导致数据库短时间承受大量请求而崩掉；解决方案：接口层需要做基础校验，查询后若数据库没有数据，缓存一个短有效期的key-null缓存&#x2F;使用布隆过滤器<br>缓存击穿：缓存中没有但数据库中有的数据，导致数据库短时间承受大量请求而崩掉；解决方案：热点key永不过期&#x2F;加互斥锁<br>缓存雪崩：大量缓存失效，导致数据库短时间承受大量请求而崩掉；解决方案：过期时间设置随机&#x2F;Redis高可用  </p>
+</li>
+<li><p>MySQL索引失效的场景有哪些？</p>
+</li>
+</ol>
+<ul>
+<li>复合索引未遵循最左前缀原则：<code>INDEX(a, b, c)；WHERE b = 1 AND c = 2</code></li>
+<li>对索引列进行计算或函数操作：<code>WHERE YEAR(create_time) = 2023</code></li>
+<li>使用不等于(!&#x3D; 或 &lt;&gt;)：<code>WHERE status != 1</code></li>
+<li>使用 IS NULL&#x2F;IS NOT NULL：<code>WHERE name IS NULL</code></li>
+<li>隐式类型转换：user_id是varchar类型，但用数字查询</li>
+<li>字符集不匹配：表字段utf8mb4，连接使用utf8；<code>JOIN ... ON a.name = b.name</code></li>
+<li>使用 OR 条件：<code>WHERE a = 1 OR b = 2</code></li>
+<li>范围查询后的列失效：<code>WHERE a &gt; 1 AND b = 2</code>复合索引(a,b)中b无法使用索引</li>
+<li>使用 NOT IN：<code>WHERE id NOT IN (1, 2, 3) </code></li>
+<li>索引本身问题：索引选择性差&#x2F;索引列数据分布不均</li>
+<li>MySQL优化器选择：全表扫描成本更低</li>
+</ul>
+<ol start="15">
+<li>有哪些方式可以进行SQL调优？</li>
+</ol>
+<ul>
+<li>索引优化<br>合理设计索引：选择高选择性列 &amp; 复合索引顺序<br>避免索引失效<br>使用覆盖索引  </li>
+<li>SQL优化<br>避免select *<br>Join表查询：小表驱动大表<br>子查询优化</li>
+<li>数据库设计优化<br>合理的数据类型<br>高频查询表增加冗余字段</li>
+<li>执行计划分析-explain<br>type：从优到差 system &gt; const &gt; eq_ref &gt; ref &gt; range &gt; index &gt; ALL<br>key：实际使用的索引<br>rows：预估扫描行数<br>Extra：Using index(覆盖索引)、Using filesort(需要优化)  </li>
+<li>监控持续优化<br>发现问题：通过监控&#x2F;慢查询日志定位SQL<br>分析原因：explain执行计划分析<br>指定方案：索引优化&#x2F;SQL重写&#x2F;架构调整<br>实施验证：测试环境验证<br>上线监控：灰度发布并持续监控</li>
+</ul>
+<ol start="16">
+<li>项目中遇到了哪些难点？是如何解决的？</li>
+</ol>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E9%9D%A2%E7%BB%8F/">面经</a></div><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/Java/util/SensitiveWordFilter/"><img class="prev-cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">敏感词过滤</div></div></a></div><div class="next-post pull-right"><a href="/Curriculum%20vitae/%E9%9D%A2%E7%BB%8F/623%E4%B8%AD%E8%BD%AF%E5%9B%BD%E9%99%85%E4%B8%80%E9%9D%A2/"><img class="next-cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">6.14软通动力一面</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/Curriculum%20vitae/%E9%9D%A2%E7%BB%8F/623%E4%B8%AD%E8%BD%AF%E5%9B%BD%E9%99%85%E4%B8%80%E9%9D%A2/" title="6.14软通动力一面"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-06-14</div><div class="title">6.14软通动力一面</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/./img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Kyle Song</div><div class="author-info__description">Forge ahead like a gigantic ship breaking through strong winds and heavy waves</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">55</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">16</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">14</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Conven1"><i class="fab fa-github"></i><span>关注我</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Conven1" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:kerideth@163.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="sticky_layout"></div></div></main><footer id="footer"><div id="footer-wrap"></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script></div></body></html>

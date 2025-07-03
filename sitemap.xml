@@ -2,6 +2,42 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://conven1.github.io/Java/util/SensitiveWordFilter/</loc>
+    
+    <lastmod>2025-07-03</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://conven1.github.io/Java/Notification/SendEmail/</loc>
+    
+    <lastmod>2025-07-03</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://conven1.github.io/Java/Notification/ReadEmail/</loc>
+    
+    <lastmod>2025-07-03</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://conven1.github.io/Java/io/%E8%A7%A3%E6%9E%90Txt%E7%9A%84json/</loc>
+    
+    <lastmod>2025-07-03</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://conven1.github.io/Front-end/vue/Element/%E4%B8%8B%E6%8B%89%E6%A1%86%E5%B8%B8%E7%94%A8%E5%B1%9E%E6%80%A7/</loc>
     
     <lastmod>2025-07-03</lastmod>
@@ -317,43 +353,7 @@
   </url>
   
   <url>
-    <loc>https://conven1.github.io/Java/util/SensitiveWordFilter/</loc>
-    
-    <lastmod>2025-06-20</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://conven1.github.io/Java/Notification/SendEmail/</loc>
-    
-    <lastmod>2025-06-08</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://conven1.github.io/Java/io/%E8%A7%A3%E6%9E%90Txt%E7%9A%84json/</loc>
-    
-    <lastmod>2025-06-03</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://conven1.github.io/Spring/SpringBoot3.0/%E7%89%88%E6%9C%AC%E5%8D%87%E7%BA%A7/</loc>
-    
-    <lastmod>2025-05-25</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://conven1.github.io/Java/Notification/ReadEmail/</loc>
     
     <lastmod>2025-05-25</lastmod>
     
@@ -702,21 +702,7 @@
   </url>
   
   <url>
-    <loc>https://conven1.github.io/categories/Email/</loc>
-    <lastmod>2025-07-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://conven1.github.io/categories/SpringBoot/</loc>
-    <lastmod>2025-07-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://conven1.github.io/categories/Java-IO/</loc>
     <lastmod>2025-07-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -731,13 +717,6 @@
   
   <url>
     <loc>https://conven1.github.io/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</loc>
-    <lastmod>2025-07-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://conven1.github.io/categories/Java%E5%B7%A5%E5%85%B7%E7%B1%BB/</loc>
     <lastmod>2025-07-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
